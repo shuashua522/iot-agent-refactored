@@ -1,0 +1,61 @@
+[
+  {
+    "event_type": "call_service",
+    "data": {
+      "domain": "fan",
+      "service": "set_percentage",
+      "service_data": {
+        "entity_id": "fan.demo",
+        "percentage": 75
+      }
+    },
+    "time_fired": "2026-04-13T19:11:41.030408+08:00",
+    "context": {
+      "id": "520bdd38f4c740b08f8c4cc93a778a69",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "event_type": "state_changed",
+    "data": {
+      "entity_id": "fan.demo",
+      "old_state": {
+        "entity_id": "fan.demo",
+        "state": "off",
+        "attributes": {
+          "percentage": 0
+        },
+        "last_changed": "2026-04-13T19:11:40.979740+08:00",
+        "last_reported": "2026-04-13T19:11:40.979740+08:00",
+        "last_updated": "2026-04-13T19:11:40.979740+08:00",
+        "context": {
+          "id": "9c2ebc3986a342b4ac226940806895a6",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "new_state": {
+        "entity_id": "fan.demo",
+        "state": "on",
+        "attributes": {
+          "percentage": 75
+        },
+        "last_changed": "2026-04-13T19:11:41.035366+08:00",
+        "last_reported": "2026-04-13T19:11:41.035366+08:00",
+        "last_updated": "2026-04-13T19:11:41.035366+08:00",
+        "context": {
+          "id": "520bdd38f4c740b08f8c4cc93a778a69",
+          "parent_id": null,
+          "user_id": null
+        }
+      }
+    },
+    "time_fired": "2026-04-13T19:11:41.037379+08:00",
+    "context": {
+      "id": "520bdd38f4c740b08f8c4cc93a778a69",
+      "parent_id": null,
+      "user_id": null
+    }
+  }
+]

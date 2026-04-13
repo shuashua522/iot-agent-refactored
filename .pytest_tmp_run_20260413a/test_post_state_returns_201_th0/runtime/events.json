@@ -1,0 +1,72 @@
+[
+  {
+    "event_type": "state_changed",
+    "data": {
+      "entity_id": "sensor.demo_virtual",
+      "old_state": null,
+      "new_state": {
+        "entity_id": "sensor.demo_virtual",
+        "state": "on",
+        "attributes": {
+          "unit_of_measurement": "x"
+        },
+        "last_changed": "2026-04-13T19:11:38.771975+08:00",
+        "last_reported": "2026-04-13T19:11:38.771975+08:00",
+        "last_updated": "2026-04-13T19:11:38.771975+08:00",
+        "context": {
+          "id": "be930579e94944239fe7b55fc03675a4",
+          "parent_id": null,
+          "user_id": null
+        }
+      }
+    },
+    "time_fired": "2026-04-13T19:11:38.774003+08:00",
+    "context": {
+      "id": "be930579e94944239fe7b55fc03675a4",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "event_type": "state_changed",
+    "data": {
+      "entity_id": "sensor.demo_virtual",
+      "old_state": {
+        "entity_id": "sensor.demo_virtual",
+        "state": "on",
+        "attributes": {
+          "unit_of_measurement": "x"
+        },
+        "last_changed": "2026-04-13T19:11:38.771975+08:00",
+        "last_reported": "2026-04-13T19:11:38.771975+08:00",
+        "last_updated": "2026-04-13T19:11:38.771975+08:00",
+        "context": {
+          "id": "be930579e94944239fe7b55fc03675a4",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "new_state": {
+        "entity_id": "sensor.demo_virtual",
+        "state": "off",
+        "attributes": {
+          "unit_of_measurement": "x"
+        },
+        "last_changed": "2026-04-13T19:11:38.785972+08:00",
+        "last_reported": "2026-04-13T19:11:38.785972+08:00",
+        "last_updated": "2026-04-13T19:11:38.785972+08:00",
+        "context": {
+          "id": "5ef39e26e79745699a44f5ae70e8046e",
+          "parent_id": null,
+          "user_id": null
+        }
+      }
+    },
+    "time_fired": "2026-04-13T19:11:38.787967+08:00",
+    "context": {
+      "id": "5ef39e26e79745699a44f5ae70e8046e",
+      "parent_id": null,
+      "user_id": null
+    }
+  }
+]

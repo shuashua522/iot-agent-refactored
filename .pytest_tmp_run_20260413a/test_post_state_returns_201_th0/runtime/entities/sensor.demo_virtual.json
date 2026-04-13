@@ -1,0 +1,27 @@
+{
+  "entity_id": "sensor.demo_virtual",
+  "domain": "sensor",
+  "object_id": "demo_virtual",
+  "unique_id": null,
+  "device_id": null,
+  "area_id": null,
+  "platform": "manual",
+  "name": null,
+  "original_name": null,
+  "device_class": null,
+  "entity_category": null,
+  "hidden_by": null,
+  "disabled_by": null,
+  "supported_features": 0,
+  "capabilities": null,
+  "service_profile": {},
+  "links": {},
+  "actions": {},
+  "state": "on",
+  "attributes": {
+    "unit_of_measurement": "x"
+  },
+  "metadata": {
+    "ad_hoc": true
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "device_id": "device.demo_lamp",
+  "name": "Demo Lamp",
+  "name_by_user": null,
+  "area_id": null,
+  "manufacturer": "Demo",
+  "model": "Lamp",
+  "model_id": null,
+  "sw_version": null,
+  "hw_version": null,
+  "serial_number": null,
+  "identifiers": [],
+  "connections": [],
+  "configuration_url": null,
+  "via_device_id": null,
+  "entities": [
+    "switch.demo_lamp_power"
+  ],
+  "metadata": {}
+}

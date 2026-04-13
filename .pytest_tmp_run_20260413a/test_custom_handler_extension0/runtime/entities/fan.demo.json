@@ -1,0 +1,25 @@
+{
+  "entity_id": "fan.demo",
+  "domain": "fan",
+  "object_id": "demo",
+  "unique_id": null,
+  "device_id": null,
+  "area_id": null,
+  "platform": "mock",
+  "name": null,
+  "original_name": null,
+  "device_class": null,
+  "entity_category": null,
+  "hidden_by": null,
+  "disabled_by": null,
+  "supported_features": 0,
+  "capabilities": null,
+  "service_profile": {},
+  "links": {},
+  "actions": {},
+  "state": "off",
+  "attributes": {
+    "percentage": 0
+  },
+  "metadata": {}
+}

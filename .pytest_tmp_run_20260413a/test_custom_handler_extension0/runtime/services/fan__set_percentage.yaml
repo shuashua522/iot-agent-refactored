@@ -1,0 +1,20 @@
+domain: fan
+service: set_percentage
+name: Set percentage
+description: Set a fan percentage.
+fields:
+  entity_id:
+    required: true
+    name: null
+    description: null
+    selector: null
+  percentage:
+    required: true
+    name: null
+    description: null
+    selector: null
+target:
+  entity:
+  - {}
+handler: tests.custom_handlers:fan_set_percentage
+supports_response: true

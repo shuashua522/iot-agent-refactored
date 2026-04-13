@@ -1,0 +1,17 @@
+{
+  "fan.demo": {
+    "entity_id": "fan.demo",
+    "state": "on",
+    "attributes": {
+      "percentage": 75
+    },
+    "last_changed": "2026-04-13T19:11:41.035366+08:00",
+    "last_reported": "2026-04-13T19:11:41.035366+08:00",
+    "last_updated": "2026-04-13T19:11:41.035366+08:00",
+    "context": {
+      "id": "520bdd38f4c740b08f8c4cc93a778a69",
+      "parent_id": null,
+      "user_id": null
+    }
+  }
+}

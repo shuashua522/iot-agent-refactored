@@ -1,0 +1,248 @@
+[
+  {
+    "event_type": "call_service",
+    "data": {
+      "domain": "light",
+      "service": "turn_on",
+      "service_data": {
+        "entity_id": "light.philips_cn_1061200910_lite_s_2"
+      }
+    },
+    "time_fired": "2026-04-13T19:23:53.815704+08:00",
+    "context": {
+      "id": "924730b02c3d435e967d437353eebc98",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "event_type": "state_changed",
+    "data": {
+      "entity_id": "light.philips_cn_1061200910_lite_s_2",
+      "old_state": {
+        "entity_id": "light.philips_cn_1061200910_lite_s_2",
+        "state": "on",
+        "attributes": {
+          "effect_list": [
+            "mode 0",
+            "mode 1",
+            "mode 2"
+          ],
+          "supported_color_modes": [
+            "brightness"
+          ],
+          "effect": "mode 1",
+          "color_mode": "brightness",
+          "brightness": 3,
+          "friendly_name": "米家智能台灯Lite  灯",
+          "supported_features": 4
+        },
+        "last_changed": "2025-10-27T11:25:38.188829Z",
+        "last_reported": "2025-10-27T11:25:38.188829Z",
+        "last_updated": "2025-10-27T11:25:38.188829Z",
+        "context": {
+          "id": "01KEP0S242MJCCG8Y0KKZGWPAD",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "new_state": {
+        "entity_id": "light.philips_cn_1061200910_lite_s_2",
+        "state": "on",
+        "attributes": {
+          "effect_list": [
+            "mode 0",
+            "mode 1",
+            "mode 2"
+          ],
+          "supported_color_modes": [
+            "brightness"
+          ],
+          "effect": "mode 1",
+          "color_mode": "brightness",
+          "brightness": 3,
+          "friendly_name": "米家智能台灯Lite  灯",
+          "supported_features": 4
+        },
+        "last_changed": "2025-10-27T11:25:38.188829Z",
+        "last_reported": "2026-04-13T19:23:53.817698+08:00",
+        "last_updated": "2026-04-13T19:23:53.817698+08:00",
+        "context": {
+          "id": "924730b02c3d435e967d437353eebc98",
+          "parent_id": null,
+          "user_id": null
+        }
+      }
+    },
+    "time_fired": "2026-04-13T19:23:53.823684+08:00",
+    "context": {
+      "id": "924730b02c3d435e967d437353eebc98",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "event_type": "call_service",
+    "data": {
+      "domain": "light",
+      "service": "turn_off",
+      "service_data": {
+        "entity_id": "light.philips_cn_1061200910_lite_s_2"
+      }
+    },
+    "time_fired": "2026-04-13T19:24:00.322162+08:00",
+    "context": {
+      "id": "fd5eaef6aca841c8ab5441526e958076",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "event_type": "state_changed",
+    "data": {
+      "entity_id": "light.philips_cn_1061200910_lite_s_2",
+      "old_state": {
+        "entity_id": "light.philips_cn_1061200910_lite_s_2",
+        "state": "on",
+        "attributes": {
+          "effect_list": [
+            "mode 0",
+            "mode 1",
+            "mode 2"
+          ],
+          "supported_color_modes": [
+            "brightness"
+          ],
+          "effect": "mode 1",
+          "color_mode": "brightness",
+          "brightness": 3,
+          "friendly_name": "米家智能台灯Lite  灯",
+          "supported_features": 4
+        },
+        "last_changed": "2025-10-27T11:25:38.188829Z",
+        "last_reported": "2026-04-13T19:23:53.817698+08:00",
+        "last_updated": "2026-04-13T19:23:53.817698+08:00",
+        "context": {
+          "id": "924730b02c3d435e967d437353eebc98",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "new_state": {
+        "entity_id": "light.philips_cn_1061200910_lite_s_2",
+        "state": "off",
+        "attributes": {
+          "effect_list": [
+            "mode 0",
+            "mode 1",
+            "mode 2"
+          ],
+          "supported_color_modes": [
+            "brightness"
+          ],
+          "effect": "mode 1",
+          "color_mode": "brightness",
+          "brightness": 3,
+          "friendly_name": "米家智能台灯Lite  灯",
+          "supported_features": 4
+        },
+        "last_changed": "2026-04-13T19:24:00.340115+08:00",
+        "last_reported": "2026-04-13T19:24:00.340115+08:00",
+        "last_updated": "2026-04-13T19:24:00.340115+08:00",
+        "context": {
+          "id": "fd5eaef6aca841c8ab5441526e958076",
+          "parent_id": null,
+          "user_id": null
+        }
+      }
+    },
+    "time_fired": "2026-04-13T19:24:00.371837+08:00",
+    "context": {
+      "id": "fd5eaef6aca841c8ab5441526e958076",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "event_type": "call_service",
+    "data": {
+      "domain": "light",
+      "service": "turn_on",
+      "service_data": {
+        "entity_id": "light.philips_cn_1061200910_lite_s_2"
+      }
+    },
+    "time_fired": "2026-04-13T19:25:33.641089+08:00",
+    "context": {
+      "id": "e418f8f08fea41fc95bf1b7027942203",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "event_type": "state_changed",
+    "data": {
+      "entity_id": "light.philips_cn_1061200910_lite_s_2",
+      "old_state": {
+        "entity_id": "light.philips_cn_1061200910_lite_s_2",
+        "state": "off",
+        "attributes": {
+          "effect_list": [
+            "mode 0",
+            "mode 1",
+            "mode 2"
+          ],
+          "supported_color_modes": [
+            "brightness"
+          ],
+          "effect": "mode 1",
+          "color_mode": "brightness",
+          "brightness": 3,
+          "friendly_name": "米家智能台灯Lite  灯",
+          "supported_features": 4
+        },
+        "last_changed": "2026-04-13T19:24:00.340115+08:00",
+        "last_reported": "2026-04-13T19:24:00.340115+08:00",
+        "last_updated": "2026-04-13T19:24:00.340115+08:00",
+        "context": {
+          "id": "fd5eaef6aca841c8ab5441526e958076",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "new_state": {
+        "entity_id": "light.philips_cn_1061200910_lite_s_2",
+        "state": "on",
+        "attributes": {
+          "effect_list": [
+            "mode 0",
+            "mode 1",
+            "mode 2"
+          ],
+          "supported_color_modes": [
+            "brightness"
+          ],
+          "effect": "mode 1",
+          "color_mode": "brightness",
+          "brightness": 3,
+          "friendly_name": "米家智能台灯Lite  灯",
+          "supported_features": 4
+        },
+        "last_changed": "2026-04-13T19:25:33.643854+08:00",
+        "last_reported": "2026-04-13T19:25:33.643854+08:00",
+        "last_updated": "2026-04-13T19:25:33.643854+08:00",
+        "context": {
+          "id": "e418f8f08fea41fc95bf1b7027942203",
+          "parent_id": null,
+          "user_id": null
+        }
+      }
+    },
+    "time_fired": "2026-04-13T19:25:33.648734+08:00",
+    "context": {
+      "id": "e418f8f08fea41fc95bf1b7027942203",
+      "parent_id": null,
+      "user_id": null
+    }
+  }
+]

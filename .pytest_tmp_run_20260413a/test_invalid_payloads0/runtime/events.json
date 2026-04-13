@@ -1,0 +1,19 @@
+[
+  {
+    "event_type": "call_service",
+    "data": {
+      "domain": "text",
+      "service": "set_value",
+      "service_data": {
+        "entity_id": "text.lumi_cn_551385025_mcn001_effective_time_p_6_2",
+        "value": "bad"
+      }
+    },
+    "time_fired": "2026-04-13T19:11:45.401519+08:00",
+    "context": {
+      "id": "8b16e978a9004f2db57f829b3af84b7d",
+      "parent_id": null,
+      "user_id": null
+    }
+  }
+]

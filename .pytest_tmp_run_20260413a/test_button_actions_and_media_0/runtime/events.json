@@ -1,0 +1,268 @@
+[
+  {
+    "event_type": "call_service",
+    "data": {
+      "domain": "button",
+      "service": "press",
+      "service_data": {
+        "entity_id": "button.philips_cn_1061200910_lite_toggle_a_2_1"
+      }
+    },
+    "time_fired": "2026-04-13T19:11:43.300179+08:00",
+    "context": {
+      "id": "b56c7d81049d4824ac2e84d66f996a28",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "event_type": "state_changed",
+    "data": {
+      "entity_id": "button.philips_cn_1061200910_lite_toggle_a_2_1",
+      "old_state": {
+        "entity_id": "button.philips_cn_1061200910_lite_toggle_a_2_1",
+        "state": "2025-10-27T11:25:38.188629+00:00",
+        "attributes": {
+          "friendly_name": "米家智能台灯Lite  灯 开关状态切换"
+        },
+        "last_changed": "2025-10-27T11:25:38.188629Z",
+        "last_reported": "2025-10-27T11:25:38.188629Z",
+        "last_updated": "2025-10-27T11:25:38.188629Z",
+        "context": {
+          "id": "01K8JPNA0CPQG2WH114E2JW6X2",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "new_state": {
+        "entity_id": "button.philips_cn_1061200910_lite_toggle_a_2_1",
+        "state": "2026-04-13T19:11:43.300179+08:00",
+        "attributes": {
+          "friendly_name": "米家智能台灯Lite  灯 开关状态切换"
+        },
+        "last_changed": "2026-04-13T19:11:43.300179+08:00",
+        "last_reported": "2026-04-13T19:11:43.300179+08:00",
+        "last_updated": "2026-04-13T19:11:43.300179+08:00",
+        "context": {
+          "id": "b56c7d81049d4824ac2e84d66f996a28",
+          "parent_id": null,
+          "user_id": null
+        }
+      }
+    },
+    "time_fired": "2026-04-13T19:11:43.309556+08:00",
+    "context": {
+      "id": "b56c7d81049d4824ac2e84d66f996a28",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "event_type": "call_service",
+    "data": {
+      "domain": "light",
+      "service": "toggle",
+      "service_data": {
+        "entity_id": "light.philips_cn_1061200910_lite_s_2"
+      }
+    },
+    "time_fired": "2026-04-13T19:11:43.314555+08:00",
+    "context": {
+      "id": "b56c7d81049d4824ac2e84d66f996a28",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "event_type": "state_changed",
+    "data": {
+      "entity_id": "light.philips_cn_1061200910_lite_s_2",
+      "old_state": {
+        "entity_id": "light.philips_cn_1061200910_lite_s_2",
+        "state": "on",
+        "attributes": {
+          "effect_list": [
+            "mode 0",
+            "mode 1",
+            "mode 2"
+          ],
+          "supported_color_modes": [
+            "brightness"
+          ],
+          "effect": "mode 1",
+          "color_mode": "brightness",
+          "brightness": 3,
+          "friendly_name": "米家智能台灯Lite  灯",
+          "supported_features": 4
+        },
+        "last_changed": "2025-10-27T11:25:38.188829Z",
+        "last_reported": "2025-10-27T11:25:38.188829Z",
+        "last_updated": "2025-10-27T11:25:38.188829Z",
+        "context": {
+          "id": "01KEP0S242MJCCG8Y0KKZGWPAD",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "new_state": {
+        "entity_id": "light.philips_cn_1061200910_lite_s_2",
+        "state": "off",
+        "attributes": {
+          "effect_list": [
+            "mode 0",
+            "mode 1",
+            "mode 2"
+          ],
+          "supported_color_modes": [
+            "brightness"
+          ],
+          "effect": "mode 1",
+          "color_mode": "brightness",
+          "brightness": 3,
+          "friendly_name": "米家智能台灯Lite  灯",
+          "supported_features": 4
+        },
+        "last_changed": "2026-04-13T19:11:43.316236+08:00",
+        "last_reported": "2026-04-13T19:11:43.316236+08:00",
+        "last_updated": "2026-04-13T19:11:43.316236+08:00",
+        "context": {
+          "id": "b56c7d81049d4824ac2e84d66f996a28",
+          "parent_id": null,
+          "user_id": null
+        }
+      }
+    },
+    "time_fired": "2026-04-13T19:11:43.323924+08:00",
+    "context": {
+      "id": "b56c7d81049d4824ac2e84d66f996a28",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "event_type": "call_service",
+    "data": {
+      "domain": "button",
+      "service": "press",
+      "service_data": {
+        "entity_id": "button.xiaomi_cn_701074704_l15a_play_music_a_7_5"
+      }
+    },
+    "time_fired": "2026-04-13T19:11:43.334874+08:00",
+    "context": {
+      "id": "27d353a6d9ff46abb206d4423939e450",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "event_type": "state_changed",
+    "data": {
+      "entity_id": "button.xiaomi_cn_701074704_l15a_play_music_a_7_5",
+      "old_state": {
+        "entity_id": "button.xiaomi_cn_701074704_l15a_play_music_a_7_5",
+        "state": "unknown",
+        "attributes": {
+          "friendly_name": "小米AI音箱（第二代）  智能音箱 播放音乐"
+        },
+        "last_changed": "2025-11-04T06:50:28.328508Z",
+        "last_reported": "2025-11-04T06:50:28.328508Z",
+        "last_updated": "2025-11-04T06:50:28.328508Z",
+        "context": {
+          "id": "01K96T37384XEXNYVMW957PMDG",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "new_state": {
+        "entity_id": "button.xiaomi_cn_701074704_l15a_play_music_a_7_5",
+        "state": "2026-04-13T19:11:43.334874+08:00",
+        "attributes": {
+          "friendly_name": "小米AI音箱（第二代）  智能音箱 播放音乐"
+        },
+        "last_changed": "2026-04-13T19:11:43.339355+08:00",
+        "last_reported": "2026-04-13T19:11:43.339355+08:00",
+        "last_updated": "2026-04-13T19:11:43.339355+08:00",
+        "context": {
+          "id": "27d353a6d9ff46abb206d4423939e450",
+          "parent_id": null,
+          "user_id": null
+        }
+      }
+    },
+    "time_fired": "2026-04-13T19:11:43.345774+08:00",
+    "context": {
+      "id": "27d353a6d9ff46abb206d4423939e450",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "event_type": "call_service",
+    "data": {
+      "domain": "media_player",
+      "service": "media_play",
+      "service_data": {
+        "entity_id": "media_player.xiaomi_cn_701074704_l15a"
+      }
+    },
+    "time_fired": "2026-04-13T19:11:43.345774+08:00",
+    "context": {
+      "id": "27d353a6d9ff46abb206d4423939e450",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "event_type": "state_changed",
+    "data": {
+      "entity_id": "media_player.xiaomi_cn_701074704_l15a",
+      "old_state": {
+        "entity_id": "media_player.xiaomi_cn_701074704_l15a",
+        "state": "idle",
+        "attributes": {
+          "volume_level": 0.1,
+          "is_volume_muted": true,
+          "media_content_type": "music",
+          "device_class": "speaker",
+          "friendly_name": "小米AI音箱（第二代）  音箱",
+          "supported_features": 21565
+        },
+        "last_changed": "2025-11-04T06:52:46.891045Z",
+        "last_reported": "2025-11-04T06:53:46.985629Z",
+        "last_updated": "2025-11-04T06:53:46.985629Z",
+        "context": {
+          "id": "01K96T9939471HASGJX3ZS1HGR",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "new_state": {
+        "entity_id": "media_player.xiaomi_cn_701074704_l15a",
+        "state": "playing",
+        "attributes": {
+          "volume_level": 0.1,
+          "is_volume_muted": true,
+          "media_content_type": "music",
+          "device_class": "speaker",
+          "friendly_name": "小米AI音箱（第二代）  音箱",
+          "supported_features": 21565
+        },
+        "last_changed": "2026-04-13T19:11:43.350774+08:00",
+        "last_reported": "2026-04-13T19:11:43.350774+08:00",
+        "last_updated": "2026-04-13T19:11:43.350774+08:00",
+        "context": {
+          "id": "27d353a6d9ff46abb206d4423939e450",
+          "parent_id": null,
+          "user_id": null
+        }
+      }
+    },
+    "time_fired": "2026-04-13T19:11:43.357925+08:00",
+    "context": {
+      "id": "27d353a6d9ff46abb206d4423939e450",
+      "parent_id": null,
+      "user_id": null
+    }
+  }
+]

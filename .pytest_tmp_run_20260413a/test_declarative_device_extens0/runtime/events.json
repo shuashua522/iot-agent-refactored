@@ -1,0 +1,60 @@
+[
+  {
+    "event_type": "call_service",
+    "data": {
+      "domain": "switch",
+      "service": "turn_on",
+      "service_data": {
+        "entity_id": "switch.demo_lamp_power"
+      }
+    },
+    "time_fired": "2026-04-13T19:11:40.872220+08:00",
+    "context": {
+      "id": "0e59e86cfdaf41f5be3db482b8e0278e",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "event_type": "state_changed",
+    "data": {
+      "entity_id": "switch.demo_lamp_power",
+      "old_state": {
+        "entity_id": "switch.demo_lamp_power",
+        "state": "off",
+        "attributes": {
+          "friendly_name": "Demo Lamp Power"
+        },
+        "last_changed": "2026-04-13T19:11:40.857193+08:00",
+        "last_reported": "2026-04-13T19:11:40.857193+08:00",
+        "last_updated": "2026-04-13T19:11:40.857193+08:00",
+        "context": {
+          "id": "5a9c00d1512e4d0dabcbc66b1aed28bb",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "new_state": {
+        "entity_id": "switch.demo_lamp_power",
+        "state": "on",
+        "attributes": {
+          "friendly_name": "Demo Lamp Power"
+        },
+        "last_changed": "2026-04-13T19:11:40.873711+08:00",
+        "last_reported": "2026-04-13T19:11:40.873711+08:00",
+        "last_updated": "2026-04-13T19:11:40.873711+08:00",
+        "context": {
+          "id": "0e59e86cfdaf41f5be3db482b8e0278e",
+          "parent_id": null,
+          "user_id": null
+        }
+      }
+    },
+    "time_fired": "2026-04-13T19:11:40.875479+08:00",
+    "context": {
+      "id": "0e59e86cfdaf41f5be3db482b8e0278e",
+      "parent_id": null,
+      "user_id": null
+    }
+  }
+]

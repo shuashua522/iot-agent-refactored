@@ -1,0 +1,154 @@
+[
+  {
+    "event_type": "call_service",
+    "data": {
+      "domain": "light",
+      "service": "turn_on",
+      "service_data": {
+        "entity_id": "light.philips_cn_1061200910_lite_s_2",
+        "brightness": 50
+      }
+    },
+    "time_fired": "2026-04-13T19:11:40.732370+08:00",
+    "context": {
+      "id": "6694b325f2b84d7c9f1e84c85e078f50",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "event_type": "state_changed",
+    "data": {
+      "entity_id": "light.philips_cn_1061200910_lite_s_2",
+      "old_state": {
+        "entity_id": "light.philips_cn_1061200910_lite_s_2",
+        "state": "on",
+        "attributes": {
+          "effect_list": [
+            "mode 0",
+            "mode 1",
+            "mode 2"
+          ],
+          "supported_color_modes": [
+            "brightness"
+          ],
+          "effect": "mode 1",
+          "color_mode": "brightness",
+          "brightness": 3,
+          "friendly_name": "米家智能台灯Lite  灯",
+          "supported_features": 4
+        },
+        "last_changed": "2025-10-27T11:25:38.188829Z",
+        "last_reported": "2025-10-27T11:25:38.188829Z",
+        "last_updated": "2025-10-27T11:25:38.188829Z",
+        "context": {
+          "id": "01KEP0S242MJCCG8Y0KKZGWPAD",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "new_state": {
+        "entity_id": "light.philips_cn_1061200910_lite_s_2",
+        "state": "on",
+        "attributes": {
+          "effect_list": [
+            "mode 0",
+            "mode 1",
+            "mode 2"
+          ],
+          "supported_color_modes": [
+            "brightness"
+          ],
+          "effect": "mode 1",
+          "color_mode": "brightness",
+          "brightness": 50,
+          "friendly_name": "米家智能台灯Lite  灯",
+          "supported_features": 4
+        },
+        "last_changed": "2025-10-27T11:25:38.188829Z",
+        "last_reported": "2026-04-13T19:11:40.732370+08:00",
+        "last_updated": "2026-04-13T19:11:40.732370+08:00",
+        "context": {
+          "id": "6694b325f2b84d7c9f1e84c85e078f50",
+          "parent_id": null,
+          "user_id": null
+        }
+      }
+    },
+    "time_fired": "2026-04-13T19:11:40.738431+08:00",
+    "context": {
+      "id": "6694b325f2b84d7c9f1e84c85e078f50",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "event_type": "call_service",
+    "data": {
+      "domain": "media_player",
+      "service": "media_next_track",
+      "service_data": {
+        "entity_id": "media_player.xiaomi_cn_701074704_l15a"
+      }
+    },
+    "time_fired": "2026-04-13T19:11:40.746388+08:00",
+    "context": {
+      "id": "de8242492e4e475a91f1fc6283be4155",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "event_type": "state_changed",
+    "data": {
+      "entity_id": "media_player.xiaomi_cn_701074704_l15a",
+      "old_state": {
+        "entity_id": "media_player.xiaomi_cn_701074704_l15a",
+        "state": "idle",
+        "attributes": {
+          "volume_level": 0.1,
+          "is_volume_muted": true,
+          "media_content_type": "music",
+          "device_class": "speaker",
+          "friendly_name": "小米AI音箱（第二代）  音箱",
+          "supported_features": 21565
+        },
+        "last_changed": "2025-11-04T06:52:46.891045Z",
+        "last_reported": "2025-11-04T06:53:46.985629Z",
+        "last_updated": "2025-11-04T06:53:46.985629Z",
+        "context": {
+          "id": "01K96T9939471HASGJX3ZS1HGR",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "new_state": {
+        "entity_id": "media_player.xiaomi_cn_701074704_l15a",
+        "state": "idle",
+        "attributes": {
+          "volume_level": 0.1,
+          "is_volume_muted": true,
+          "media_content_type": "music",
+          "device_class": "speaker",
+          "friendly_name": "小米AI音箱（第二代）  音箱",
+          "supported_features": 21565,
+          "last_track_action": "next"
+        },
+        "last_changed": "2025-11-04T06:52:46.891045Z",
+        "last_reported": "2026-04-13T19:11:40.748570+08:00",
+        "last_updated": "2026-04-13T19:11:40.748570+08:00",
+        "context": {
+          "id": "de8242492e4e475a91f1fc6283be4155",
+          "parent_id": null,
+          "user_id": null
+        }
+      }
+    },
+    "time_fired": "2026-04-13T19:11:40.752947+08:00",
+    "context": {
+      "id": "de8242492e4e475a91f1fc6283be4155",
+      "parent_id": null,
+      "user_id": null
+    }
+  }
+]
