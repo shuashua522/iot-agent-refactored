@@ -244,5 +244,113 @@
       "parent_id": null,
       "user_id": null
     }
+  },
+  {
+    "event_type": "call_service",
+    "data": {
+      "domain": "light",
+      "service": "turn_off",
+      "service_data": {
+        "entity_id": "light.yeelink_cn_1162511951_mbulb3_s_2"
+      }
+    },
+    "time_fired": "2026-04-16T19:42:33.482713+08:00",
+    "context": {
+      "id": "6588d24761ba4c0ab5828847e6be9aed",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "event_type": "state_changed",
+    "data": {
+      "entity_id": "light.yeelink_cn_1162511951_mbulb3_s_2",
+      "old_state": {
+        "entity_id": "light.yeelink_cn_1162511951_mbulb3_s_2",
+        "state": "on",
+        "attributes": {
+          "min_color_temp_kelvin": 2700,
+          "max_color_temp_kelvin": 6500,
+          "min_mireds": 153,
+          "max_mireds": 370,
+          "supported_color_modes": [
+            "color_temp"
+          ],
+          "color_mode": "color_temp",
+          "brightness": 76,
+          "color_temp_kelvin": 4000,
+          "color_temp": 250,
+          "hs_color": [
+            26.812,
+            34.87
+          ],
+          "rgb_color": [
+            255,
+            206,
+            166
+          ],
+          "xy_color": [
+            0.42,
+            0.365
+          ],
+          "friendly_name": "灯泡  灯",
+          "supported_features": 0
+        },
+        "last_changed": "2025-11-04T07:03:05.063308Z",
+        "last_reported": "2025-11-04T07:03:05.063308Z",
+        "last_updated": "2025-11-04T07:03:05.063308Z",
+        "context": {
+          "id": "01K96TTA37VPMQAXHMTREHZYZK",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "new_state": {
+        "entity_id": "light.yeelink_cn_1162511951_mbulb3_s_2",
+        "state": "off",
+        "attributes": {
+          "min_color_temp_kelvin": 2700,
+          "max_color_temp_kelvin": 6500,
+          "min_mireds": 153,
+          "max_mireds": 370,
+          "supported_color_modes": [
+            "color_temp"
+          ],
+          "color_mode": "color_temp",
+          "brightness": 76,
+          "color_temp_kelvin": 4000,
+          "color_temp": 250,
+          "hs_color": [
+            26.812,
+            34.87
+          ],
+          "rgb_color": [
+            255,
+            206,
+            166
+          ],
+          "xy_color": [
+            0.42,
+            0.365
+          ],
+          "friendly_name": "灯泡  灯",
+          "supported_features": 0
+        },
+        "last_changed": "2026-04-16T19:42:33.486057+08:00",
+        "last_reported": "2026-04-16T19:42:33.486057+08:00",
+        "last_updated": "2026-04-16T19:42:33.486057+08:00",
+        "context": {
+          "id": "6588d24761ba4c0ab5828847e6be9aed",
+          "parent_id": null,
+          "user_id": null
+        }
+      }
+    },
+    "time_fired": "2026-04-16T19:42:33.491154+08:00",
+    "context": {
+      "id": "6588d24761ba4c0ab5828847e6be9aed",
+      "parent_id": null,
+      "user_id": null
+    }
   }
 ]
