@@ -127,3 +127,22 @@ class ReloadResponse(BaseModel):
     devices: int
     entities: int
     services: int
+
+
+class InitEnvRequest(BaseModel):
+    env_id: str
+    fault_mode: str | None = None
+
+
+class InitEnvResponse(BaseModel):
+    status: str
+    env_id: str
+    active_fault_mode: str
+    saved_original_snapshot: bool
+    entity_count: int
+
+
+class RestoreOriginalEnvResponse(BaseModel):
+    status: str
+    restored: bool
+    entity_count: int

@@ -94,6 +94,25 @@
 
 它用于解决“纯声明式不够，但没必要写 Python handler”的场景。
 
+### `TestEnvManager`
+
+职责：
+
+- 加载 `src/fake_homeassistant_v2/data/test_envs/*.yaml` 测试环境定义
+- 在加载 YAML 后，尝试基于 `legacy_root` 动态注册 `base_env`
+- 执行 `init_env` 的全量环境替换
+- 保存并恢复原始环境快照（`original_env`）
+- 管理当前激活测试环境与故障模式
+- 在 `climate.set_temperature` 后按 `link_rules` 执行同房间温度传感器联动
+
+动态 `base_env` 特性：
+
+- 来源：`fake_homeassitant_try/copied_data`
+- `env_id` 固定为 `base_env`
+- `supported_fault_modes` 固定为 `["normal"]`
+- 不依赖单独 YAML 文件
+- 当 `legacy_root` 不可访问或解析失败时，不注册该环境
+
 ## 3. 主要数据模型
 
 代码位置：
@@ -140,11 +159,12 @@
 2. `ServiceEngine` 查找 `ServiceDefinition`
 3. 校验必填字段
 4. 触发 `call_service` 事件
-5. 执行 handler
-6. handler 内部通过 `runtime.set_state()` 修改状态
-7. `runtime.set_state()` 写入 `StateStore`
-8. 触发 `state_changed` 事件
-9. 返回变更后的状态列表，或在允许时返回 `service_response`
+5. 进入测试环境故障注入判定（如果当前有激活测试环境）
+6. 未命中故障时执行 handler
+7. handler 内部通过 `runtime.set_state()` 修改状态
+8. `runtime.set_state()` 写入 `StateStore`
+9. 触发 `state_changed` 事件
+10. 返回变更后的状态列表，或在允许时返回 `service_response`
 
 ### 4.3 新增实体
 
@@ -162,6 +182,23 @@
 2. 逐个保存设备中的实体定义到 `entities/`
 3. 为这些实体补齐状态
 4. 持久化状态
+
+### 4.5 切换测试环境
+
+`POST /api/mock/init_env`：
+
+1. `TestEnvManager` 读取并校验 `env_id`
+2. 目标环境可来自 YAML 或动态 `base_env`
+3. 首次切换时保存原始环境快照
+4. 清空当前运行时设备/实体/状态/事件
+5. 写入目标环境的设备、实体、初始状态
+6. 激活故障模式与故障规则
+
+`POST /api/mock/original_env`：
+
+1. 检查是否存在原始环境快照
+2. 用快照覆盖当前运行时数据
+3. 清理激活测试环境与故障模式状态
 
 ## 5. 持久化规则
 
@@ -194,6 +231,7 @@
 代码位置：
 
 - [importer.py](F:\coding_workspace\codex_workspace\homeassitant_demo\src\fake_homeassistant_v2\importer.py)
+- [legacy_parser.py](F:\coding_workspace\codex_workspace\homeassitant_demo\src\fake_homeassistant_v2\legacy_parser.py)
 
 导入器职责：
 
@@ -203,6 +241,15 @@
 - 导入状态快照
 - 导入旧 service 描述
 - 把部分旧版硬编码行为转成 `links + actions`
+
+`legacy_parser` 职责：
+
+- 提供统一的 legacy 解析入口 `parse_legacy_data()`
+- 产出可复用的 `devices/entities/states/services_payload`
+- 对设备和实体输出做稳定排序（`device_id`、`entity_id`），保证测试可重复
+- 同时被两处复用：
+  - 启动阶段旧数据导入（`import_legacy_data`）
+  - `TestEnvManager` 动态构建 `base_env`
 
 导入触发条件：
 

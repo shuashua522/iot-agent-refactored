@@ -260,3 +260,122 @@ actions 适合表达：
 - 扩展规则变化：更新 [DESIGN_RULES.md](F:\coding_workspace\codex_workspace\homeassitant_demo\docs\DESIGN_RULES.md)
 
 不要把这些知识重新堆回 `README.md`。
+
+## 11. 新增一个自定义测试环境（YAML 模板 + 最小示例）
+
+如果你要扩展 `POST /api/mock/init_env` 可切换的测试环境，直接在目录里新增一个 YAML：
+
+- `src/fake_homeassistant_v2/data/test_envs/`
+
+### 11.1 YAML 模板
+
+```yaml
+env_id: te_your_env_id
+default_fault_mode: normal
+supported_fault_modes:
+  - normal
+  - one_shot_network_error
+  - fake_success
+devices:
+  - device_id: device.test_demo
+    name: Test Device
+    area_id: room.demo
+    entities:
+      - climate.test_demo
+entities:
+  - entity_id: climate.test_demo
+    domain: climate
+    object_id: test_demo
+    device_id: device.test_demo
+    area_id: room.demo
+    platform: mock
+    state: cool
+    attributes:
+      hvac_mode: cool
+      hvac_modes: ["off", "cool", "heat"]
+      temperature: 24.0
+      current_temperature: 28.0
+initial_states:
+  - entity_id: climate.test_demo
+    state: cool
+    attributes:
+      temperature: 24.0
+link_rules:
+  - source_domain: climate
+    source_service: set_temperature
+    target_domain: sensor
+    match: same_area_id
+    target_device_class: temperature
+fault_profiles:
+  one_shot_network_error:
+    - domain: climate
+      service: set_temperature
+      entity_id: climate.test_demo
+      times: 1
+  fake_success:
+    - domain: climate
+      service: set_temperature
+      entity_id: climate.test_demo
+```
+
+### 11.2 最小可运行示例
+
+可直接参考已内置样例：
+
+- `src/fake_homeassistant_v2/data/test_envs/te_ac_sensor_v1.yaml`
+
+该示例包含：
+
+- 空调 + 多个温度传感器实体
+- 同房间联动（按 `area_id`）
+- `normal` / `one_shot_network_error` / `fake_success`
+
+### 11.3 调用步骤
+
+新增 YAML 后，无需重启进程；直接调用：
+
+```powershell
+curl -X POST http://127.0.0.1:8123/api/mock/init_env `
+  -H "Content-Type: application/json" `
+  -d "{\"env_id\":\"te_your_env_id\"}"
+```
+
+指定故障模式：
+
+```powershell
+curl -X POST http://127.0.0.1:8123/api/mock/init_env `
+  -H "Content-Type: application/json" `
+  -d "{\"env_id\":\"te_your_env_id\",\"fault_mode\":\"one_shot_network_error\"}"
+```
+
+恢复原始环境：
+
+```powershell
+curl -X POST http://127.0.0.1:8123/api/mock/original_env
+```
+
+### 11.4 常见约束
+
+- `default_fault_mode` 必须包含在 `supported_fault_modes` 里。
+- `fault_profiles` 的 key 必须是 `supported_fault_modes` 中声明过的模式。
+- 若想触发“同房间联动”，源实体和目标实体都必须设置 `area_id`，且相同。
+- `fake_success` 的语义是“接口成功但不写状态”，不是返回错误。
+
+测试环境 API 详细行为见：
+
+- [TEST_ENVIRONMENTS.md](F:\coding_workspace\codex_workspace\homeassitant_demo\docs\TEST_ENVIRONMENTS.md)
+
+## 12. 动态 `base_env`（非 YAML）
+
+`base_env` 是运行时动态生成的内置测试环境，来源为：
+
+- `fake_homeassitant_try/copied_data/device_registry.json`
+- `fake_homeassitant_try/copied_data/entity_registry.json`
+- `fake_homeassitant_try/copied_data/entities.json`
+
+特点：
+
+- 不需要在 `src/fake_homeassistant_v2/data/test_envs/` 下新增 YAML。
+- 仍通过 `POST /api/mock/init_env` 切换：`{"env_id":"base_env"}`。
+- 仅支持 `normal` 故障模式（不用于故障注入）。
+- `legacy_root` 不可访问时，不注册该环境。

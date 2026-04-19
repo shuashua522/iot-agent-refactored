@@ -358,3 +358,31 @@
     entity:
       - {}
   handler: builtin:notify.send_message
+- domain: climate
+  service: set_hvac_mode
+  name: Set HVAC mode
+  description: Set climate HVAC mode.
+  fields:
+    entity_id:
+      required: true
+    hvac_mode:
+      required: true
+  target:
+    entity:
+      - {}
+  handler: builtin:climate.set_hvac_mode
+- domain: climate
+  service: set_temperature
+  name: Set temperature
+  description: Set climate target temperature.
+  fields:
+    entity_id:
+      required: true
+    temperature:
+      required: true
+    hvac_mode:
+      required: false
+  target:
+    entity:
+      - {}
+  handler: builtin:climate.set_temperature

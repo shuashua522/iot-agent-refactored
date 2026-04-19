@@ -7,7 +7,15 @@ from fastapi.responses import JSONResponse
 
 from .config import Settings, get_settings
 from .importer import bootstrap_runtime
-from .models import DeviceUpsertRequest, EntityDefinition, EntityUpsertRequest, ReloadResponse
+from .models import (
+    DeviceUpsertRequest,
+    EntityDefinition,
+    EntityUpsertRequest,
+    InitEnvRequest,
+    InitEnvResponse,
+    ReloadResponse,
+    RestoreOriginalEnvResponse,
+)
 from .runtime import ConflictError, FakeHomeAssistantError, FakeHomeAssistantRuntime, NotFoundError
 
 
@@ -167,5 +175,18 @@ def create_app(
             entities=len(runtime.registry.entities),
             services=len(runtime.registry.services),
         )
+
+    @app.post("/api/mock/init_env", dependencies=[Depends(require_auth)], response_model=InitEnvResponse)
+    async def init_env(request_model: InitEnvRequest) -> InitEnvResponse:
+        payload = runtime.test_env_manager.init_env(
+            env_id=request_model.env_id,
+            fault_mode=request_model.fault_mode,
+        )
+        return InitEnvResponse(**payload)
+
+    @app.post("/api/mock/original_env", dependencies=[Depends(require_auth)], response_model=RestoreOriginalEnvResponse)
+    async def restore_original_env() -> RestoreOriginalEnvResponse:
+        payload = runtime.test_env_manager.restore_original_env()
+        return RestoreOriginalEnvResponse(**payload)
 
     return app

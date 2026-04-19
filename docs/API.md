@@ -4,6 +4,7 @@
 
 如果你需要了解内部实现或扩展方式，请看：
 
+- [测试环境调用指南](F:\coding_workspace\codex_workspace\homeassitant_demo\docs\TEST_ENVIRONMENTS.md)
 - [架构说明](F:\coding_workspace\codex_workspace\homeassitant_demo\docs\ARCHITECTURE.md)
 - [扩展指南](F:\coding_workspace\codex_workspace\homeassitant_demo\docs\EXTENDING.md)
 - [设计约定](F:\coding_workspace\codex_workspace\homeassitant_demo\docs\DESIGN_RULES.md)
@@ -40,6 +41,8 @@ Authorization: Bearer your-token
 - `PUT /api/mock/devices/{device_id}`
 - `PUT /api/mock/entities/{entity_id}`
 - `POST /api/mock/reload`
+- `POST /api/mock/init_env`
+- `POST /api/mock/original_env`
 
 ## 2. 通用调用约定
 
@@ -367,6 +370,52 @@ curl -X PUT http://127.0.0.1:8123/api/mock/entities/fan.demo `
 curl -X POST http://127.0.0.1:8123/api/mock/reload
 ```
 
+### 5.4 切换到测试环境
+
+```http
+POST /api/mock/init_env
+Content-Type: application/json
+```
+
+请求体：
+
+```json
+{
+  "env_id": "te_ac_sensor_v1",
+  "fault_mode": "one_shot_network_error"
+}
+```
+
+说明：
+
+- `env_id` 必填
+- `fault_mode` 可选；默认使用测试环境定义中的默认模式（未定义时为 `normal`）
+- 支持的故障模式由测试环境定义决定
+- 当前内置可用环境包括：
+  - `te_ac_sensor_v1`（来自 `src/fake_homeassistant_v2/data/test_envs/*.yaml`）
+  - `base_env`（运行时从 `fake_homeassitant_try/copied_data` 动态构建）
+- `base_env` 仅支持 `normal` 模式；传入其他 `fault_mode` 会返回 `400`
+- 详细说明见：[测试环境调用指南](F:\coding_workspace\codex_workspace\homeassitant_demo\docs\TEST_ENVIRONMENTS.md)
+
+`base_env` 调用示例：
+
+```powershell
+curl -X POST http://127.0.0.1:8123/api/mock/init_env `
+  -H "Content-Type: application/json" `
+  -d "{\"env_id\":\"base_env\"}"
+```
+
+### 5.5 恢复原始环境
+
+```powershell
+curl -X POST http://127.0.0.1:8123/api/mock/original_env
+```
+
+说明：
+
+- 仅当当前进程内调用过 `init_env` 并保存了快照时可恢复
+- 若没有可恢复快照，返回 `400`
+
 ## 6. 错误处理
 
 常见错误码：
@@ -375,6 +424,7 @@ curl -X POST http://127.0.0.1:8123/api/mock/reload
 - `401`: 启用了 token 鉴权，但请求未带正确 Bearer Token
 - `404`: 不存在的实体或 service
 - `409`: `device_id` 或 `entity_id` 路径参数与请求体不一致
+- `503`: 测试环境故障注入触发的模拟网络错误
 
 ## 7. 建议调用顺序
 

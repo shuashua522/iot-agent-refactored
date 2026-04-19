@@ -51,14 +51,16 @@ curl http://127.0.0.1:8123/api/services
 按下面顺序阅读：
 
 1. [API 文档](F:\coding_workspace\codex_workspace\homeassitant_demo\docs\API.md)
-2. [架构说明](F:\coding_workspace\codex_workspace\homeassitant_demo\docs\ARCHITECTURE.md)
-3. [扩展指南](F:\coding_workspace\codex_workspace\homeassitant_demo\docs\EXTENDING.md)
-4. [设计约定](F:\coding_workspace\codex_workspace\homeassitant_demo\docs\DESIGN_RULES.md)
+2. [测试环境调用指南](F:\coding_workspace\codex_workspace\homeassitant_demo\docs\TEST_ENVIRONMENTS.md)
+3. [架构说明](F:\coding_workspace\codex_workspace\homeassitant_demo\docs\ARCHITECTURE.md)
+4. [扩展指南](F:\coding_workspace\codex_workspace\homeassitant_demo\docs\EXTENDING.md)
+5. [设计约定](F:\coding_workspace\codex_workspace\homeassitant_demo\docs\DESIGN_RULES.md)
 
 各文档职责：
 
 - `README.md`: 项目用途、安装启动、运行目录、文档导航
 - `docs/API.md`: 对外 API、调用方式、错误码、示例
+- `docs/TEST_ENVIRONMENTS.md`: 测试环境切换、故障模式、恢复原始环境、调用示例
 - `docs/ARCHITECTURE.md`: 内部实现与运行机制
 - `docs/EXTENDING.md`: 如何新增设备、实体、service、actions、handler
 - `docs/DESIGN_RULES.md`: 设计取舍与扩展约束

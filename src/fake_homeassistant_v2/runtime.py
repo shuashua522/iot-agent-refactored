@@ -7,13 +7,15 @@ import shutil
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, Callable, Literal
 from uuid import uuid4
 from zoneinfo import ZoneInfo
 
 import yaml
+from pydantic import BaseModel, Field
 
 from .config import Settings
+from .legacy_parser import parse_legacy_data
 from .models import (
     ContextModel,
     DeviceDefinition,
@@ -24,6 +26,41 @@ from .models import (
     ServiceDefinition,
     StateRecord,
 )
+
+BUILTIN_SERVICE_HANDLERS: dict[str, str] = {
+    "switch.turn_on": "builtin:switch.turn_on",
+    "switch.turn_off": "builtin:switch.turn_off",
+    "switch.toggle": "builtin:switch.toggle",
+    "light.turn_on": "builtin:light.turn_on",
+    "light.turn_off": "builtin:light.turn_off",
+    "light.toggle": "builtin:light.toggle",
+    "climate.set_hvac_mode": "builtin:climate.set_hvac_mode",
+    "climate.set_temperature": "builtin:climate.set_temperature",
+    "number.set_value": "builtin:number.set_value",
+    "text.set_value": "builtin:text.set_value",
+    "select.select_first": "builtin:select.select_first",
+    "select.select_last": "builtin:select.select_last",
+    "select.select_next": "builtin:select.select_next",
+    "select.select_previous": "builtin:select.select_previous",
+    "select.select_option": "builtin:select.select_option",
+    "button.press": "builtin:button.press",
+    "media_player.volume_set": "builtin:media_player.volume_set",
+    "media_player.volume_up": "builtin:media_player.volume_up",
+    "media_player.volume_down": "builtin:media_player.volume_down",
+    "media_player.volume_mute": "builtin:media_player.volume_mute",
+    "media_player.media_play": "builtin:media_player.media_play",
+    "media_player.media_pause": "builtin:media_player.media_pause",
+    "media_player.media_play_pause": "builtin:media_player.media_play_pause",
+    "media_player.media_stop": "builtin:media_player.media_stop",
+    "media_player.media_previous_track": "builtin:media_player.media_previous_track",
+    "media_player.media_next_track": "builtin:media_player.media_next_track",
+    "notify.send_message": "builtin:notify.send_message",
+    "homeassistant.turn_on": "builtin:homeassistant.turn_on",
+    "homeassistant.turn_off": "builtin:homeassistant.turn_off",
+    "homeassistant.toggle": "builtin:homeassistant.toggle",
+    "homeassistant.update_entity": "builtin:homeassistant.update_entity",
+    "homeassistant.save_persistent_states": "builtin:homeassistant.save_persistent_states",
+}
 
 
 class FakeHomeAssistantError(Exception):
@@ -40,6 +77,10 @@ class NotFoundError(FakeHomeAssistantError):
 
 class ConflictError(FakeHomeAssistantError):
     status_code = 409
+
+
+class ServiceUnavailableError(FakeHomeAssistantError):
+    status_code = 503
 
 
 class StorageManager:
@@ -142,6 +183,10 @@ class StorageManager:
             return
         for path in self.list_data_files(source_dir):
             shutil.copy2(path, self.services_dir / path.name)
+
+    def clear_data_files(self, directory: Path) -> None:
+        for path in self.list_data_files(directory):
+            path.unlink(missing_ok=True)
 
 
 class RegistryStore:
@@ -300,6 +345,262 @@ class EventBus:
         return [{"event": event_type, "listener_count": 0} for event_type in sorted(types)]
 
 
+FaultMode = Literal["normal", "one_shot_network_error", "fake_success"]
+
+
+class InitialStateSpec(BaseModel):
+    entity_id: str
+    state: Any
+    attributes: dict[str, Any] = Field(default_factory=dict)
+
+
+class LinkRuleSpec(BaseModel):
+    source_domain: str
+    source_service: str
+    target_domain: str
+    match: str = "same_area_id"
+    target_device_class: str | None = None
+
+
+class FaultRuleSpec(BaseModel):
+    domain: str
+    service: str
+    entity_id: str | None = None
+    times: int | None = None
+
+
+class TestEnvironmentDefinition(BaseModel):
+    env_id: str
+    default_fault_mode: FaultMode = "normal"
+    supported_fault_modes: list[FaultMode] = Field(default_factory=lambda: ["normal"])
+    devices: list[DeviceDefinition] = Field(default_factory=list)
+    entities: list[EntityDefinition] = Field(default_factory=list)
+    initial_states: list[InitialStateSpec] = Field(default_factory=list)
+    link_rules: list[LinkRuleSpec] = Field(default_factory=list)
+    fault_profiles: dict[str, list[FaultRuleSpec]] = Field(default_factory=dict)
+
+
+@dataclass(slots=True)
+class RuntimeSnapshot:
+    devices: dict[str, DeviceDefinition]
+    entities: dict[str, EntityDefinition]
+    services: dict[str, ServiceDefinition]
+    states: dict[str, StateRecord]
+    events: list[EventRecord]
+
+
+class TestEnvManager:
+    def __init__(self, runtime: "FakeHomeAssistantRuntime", definitions_dir: Path) -> None:
+        self.runtime = runtime
+        self.definitions_dir = definitions_dir
+        self.environments: dict[str, TestEnvironmentDefinition] = {}
+        self.original_snapshot: RuntimeSnapshot | None = None
+        self.active_env_id: str | None = None
+        self.active_fault_mode: FaultMode = "normal"
+        self._active_fault_rules: list[FaultRuleSpec] = []
+        self._active_fault_counters: dict[int, int] = {}
+        self.reload_definitions()
+
+    @staticmethod
+    def _copy_map[T: BaseModel](items: dict[str, T]) -> dict[str, T]:
+        return {key: value.model_copy(deep=True) for key, value in items.items()}
+
+    @staticmethod
+    def _copy_list[T: BaseModel](items: list[T]) -> list[T]:
+        return [item.model_copy(deep=True) for item in items]
+
+    def _register_environment(self, env: TestEnvironmentDefinition) -> None:
+        if env.default_fault_mode not in env.supported_fault_modes:
+            raise FakeHomeAssistantError(
+                f"default_fault_mode '{env.default_fault_mode}' must be listed in supported_fault_modes for {env.env_id}"
+            )
+        for mode in env.fault_profiles:
+            if mode not in env.supported_fault_modes:
+                raise FakeHomeAssistantError(
+                    f"fault_profiles contains unsupported mode '{mode}' for {env.env_id}"
+                )
+        if env.env_id in self.environments:
+            raise ConflictError(f"Duplicate test environment id: {env.env_id}")
+        self.environments[env.env_id] = env
+
+    def _load_dynamic_base_env(self) -> TestEnvironmentDefinition | None:
+        legacy_root = self.runtime.settings.legacy_root
+        if legacy_root is None:
+            return None
+        try:
+            legacy_data = parse_legacy_data(legacy_root)
+        except (OSError, json.JSONDecodeError, KeyError, TypeError, ValueError):
+            return None
+
+        initial_states = [
+            InitialStateSpec(
+                entity_id=state.entity_id,
+                state=state.state,
+                attributes=dict(state.attributes),
+            )
+            for state in legacy_data.states.values()
+        ]
+        return TestEnvironmentDefinition(
+            env_id="base_env",
+            default_fault_mode="normal",
+            supported_fault_modes=["normal"],
+            devices=[device.model_copy(deep=True) for device in legacy_data.devices],
+            entities=[entity.model_copy(deep=True) for entity in legacy_data.entities],
+            initial_states=initial_states,
+            link_rules=[],
+            fault_profiles={},
+        )
+
+    def reload_definitions(self) -> None:
+        self.environments = {}
+        if self.definitions_dir.exists():
+            for path in sorted(self.definitions_dir.glob("*.yaml")) + sorted(self.definitions_dir.glob("*.yml")):
+                payload = yaml.safe_load(path.read_text(encoding="utf-8"))
+                if not isinstance(payload, dict):
+                    raise FakeHomeAssistantError(f"Invalid test environment definition in {path.name}")
+                env = TestEnvironmentDefinition.model_validate(payload)
+                self._register_environment(env)
+
+        base_env = self._load_dynamic_base_env()
+        if base_env is not None:
+            self._register_environment(base_env)
+
+    def capture_snapshot(self) -> RuntimeSnapshot:
+        return RuntimeSnapshot(
+            devices=self._copy_map(self.runtime.registry.devices),
+            entities=self._copy_map(self.runtime.registry.entities),
+            services=self._copy_map(self.runtime.registry.services),
+            states=self._copy_map(self.runtime.state_store.states),
+            events=self._copy_list(self.runtime.event_bus.events),
+        )
+
+    def _activate_fault_profile(self, env: TestEnvironmentDefinition, mode: FaultMode) -> None:
+        self.active_fault_mode = mode
+        self._active_fault_rules = [rule.model_copy(deep=True) for rule in env.fault_profiles.get(mode, [])]
+        self._active_fault_counters = {}
+        for idx, rule in enumerate(self._active_fault_rules):
+            if rule.times is not None:
+                self._active_fault_counters[idx] = max(0, int(rule.times))
+            elif mode == "one_shot_network_error":
+                self._active_fault_counters[idx] = 1
+
+    def init_env(self, env_id: str, fault_mode: str | None = None) -> dict[str, Any]:
+        env = self.environments.get(env_id)
+        if env is None:
+            raise NotFoundError(f"Unknown env_id: {env_id}")
+
+        selected_mode = fault_mode or env.default_fault_mode
+        if selected_mode not in env.supported_fault_modes:
+            raise FakeHomeAssistantError(
+                f"Unsupported fault_mode '{selected_mode}' for env '{env_id}', supported: {env.supported_fault_modes}"
+            )
+
+        saved_snapshot = False
+        if self.original_snapshot is None:
+            self.original_snapshot = self.capture_snapshot()
+            saved_snapshot = True
+
+        self.runtime.apply_test_environment(env)
+        self.active_env_id = env_id
+        self._activate_fault_profile(env, selected_mode)
+
+        return {
+            "status": "initialized",
+            "env_id": env_id,
+            "active_fault_mode": self.active_fault_mode,
+            "saved_original_snapshot": saved_snapshot,
+            "entity_count": len(self.runtime.registry.entities),
+        }
+
+    def restore_original_env(self) -> dict[str, Any]:
+        if self.original_snapshot is None:
+            raise FakeHomeAssistantError("No original environment snapshot found. Call /api/mock/init_env first.")
+
+        self.runtime.restore_snapshot(self.original_snapshot)
+        self.original_snapshot = None
+        self.active_env_id = None
+        self.active_fault_mode = "normal"
+        self._active_fault_rules = []
+        self._active_fault_counters = {}
+
+        return {"status": "restored", "restored": True, "entity_count": len(self.runtime.registry.entities)}
+
+    def _fault_rule_matches(
+        self,
+        rule: FaultRuleSpec,
+        *,
+        domain: str,
+        service: str,
+        target_entity_ids: list[str],
+    ) -> bool:
+        if rule.domain != domain or rule.service != service:
+            return False
+        if rule.entity_id is None:
+            return True
+        return rule.entity_id in target_entity_ids
+
+    def evaluate_fault(
+        self,
+        *,
+        domain: str,
+        service: str,
+        target_entity_ids: list[str],
+    ) -> FaultMode | None:
+        if self.active_env_id is None or self.active_fault_mode == "normal":
+            return None
+
+        for idx, rule in enumerate(self._active_fault_rules):
+            if not self._fault_rule_matches(rule, domain=domain, service=service, target_entity_ids=target_entity_ids):
+                continue
+            if idx in self._active_fault_counters:
+                remaining = self._active_fault_counters[idx]
+                if remaining <= 0:
+                    continue
+                self._active_fault_counters[idx] = remaining - 1
+            return self.active_fault_mode
+        return None
+
+    def apply_climate_temperature_links(
+        self,
+        *,
+        source_entity: EntityDefinition,
+        temperature: float,
+        context: ContextModel,
+    ) -> list[str]:
+        if self.active_env_id is None:
+            return []
+        env = self.environments.get(self.active_env_id)
+        if env is None:
+            return []
+
+        changed: list[str] = []
+        for rule in env.link_rules:
+            if rule.source_domain != "climate" or rule.source_service != "set_temperature":
+                continue
+            if source_entity.domain != rule.source_domain:
+                continue
+            if rule.match != "same_area_id":
+                continue
+            if source_entity.area_id is None:
+                continue
+
+            for target in self.runtime.registry.entities.values():
+                if target.domain != rule.target_domain:
+                    continue
+                if target.area_id is None or target.area_id != source_entity.area_id:
+                    continue
+                if rule.target_device_class and target.device_class != rule.target_device_class:
+                    continue
+                if target.entity_id == source_entity.entity_id:
+                    continue
+                current = self.runtime.state_store.states.get(target.entity_id)
+                attributes = dict(current.attributes) if current is not None else dict(target.attributes)
+                self.runtime.set_state(target.entity_id, state=temperature, attributes=attributes, context=context)
+                changed.append(target.entity_id)
+
+        return list(dict.fromkeys(changed))
+
+
 @dataclass(slots=True)
 class ServiceExecutionContext:
     runtime: "FakeHomeAssistantRuntime"
@@ -448,6 +749,15 @@ class ServiceEngine:
             {"domain": domain, "service": service, "service_data": payload},
             context=call_context,
         )
+        fault_mode = self.runtime.test_env_manager.evaluate_fault(
+            domain=domain,
+            service=service,
+            target_entity_ids=target_entity_ids,
+        )
+        if fault_mode == "one_shot_network_error":
+            raise ServiceUnavailableError(f"Simulated network error for {domain}.{service}")
+        if fault_mode == "fake_success":
+            return ServiceCallResponse(changed_states=[], service_response=None)
         handler = self.runtime.handlers.resolve(service_def.handler)
         result = handler(
             ServiceExecutionContext(
@@ -543,6 +853,48 @@ def register_builtin_handlers(registry: HandlerRegistry) -> None:
         if current_state == "on":
             return light_turn_off(ctx)
         return light_turn_on(ctx)
+
+    def climate_set_hvac_mode(ctx: ServiceExecutionContext) -> HandlerResult:
+        entity = _single_entity(ctx)
+        if "hvac_mode" not in ctx.payload:
+            raise FakeHomeAssistantError("Missing required field: hvac_mode")
+        hvac_mode = str(ctx.payload["hvac_mode"])
+        current = ctx.runtime.state_store.get(entity.entity_id)
+        attributes = dict(current.attributes)
+        hvac_modes = attributes.get("hvac_modes")
+        if isinstance(hvac_modes, list) and hvac_modes and hvac_mode not in hvac_modes:
+            raise FakeHomeAssistantError(f"Invalid hvac_mode: {hvac_mode}")
+        attributes["hvac_mode"] = hvac_mode
+        ctx.runtime.set_state(entity.entity_id, state=hvac_mode, attributes=attributes, context=ctx.context)
+        return HandlerResult(changed_entity_ids=[entity.entity_id])
+
+    def climate_set_temperature(ctx: ServiceExecutionContext) -> HandlerResult:
+        entity = _single_entity(ctx)
+        if "temperature" not in ctx.payload:
+            raise FakeHomeAssistantError("Missing required field: temperature")
+        target_temperature = float(ctx.payload["temperature"])
+        current = ctx.runtime.state_store.get(entity.entity_id)
+        attributes = dict(current.attributes)
+        attributes["temperature"] = target_temperature
+        if "current_temperature" in attributes:
+            attributes["current_temperature"] = target_temperature
+        if "hvac_mode" in ctx.payload:
+            hvac_mode = str(ctx.payload["hvac_mode"])
+            hvac_modes = attributes.get("hvac_modes")
+            if isinstance(hvac_modes, list) and hvac_modes and hvac_mode not in hvac_modes:
+                raise FakeHomeAssistantError(f"Invalid hvac_mode: {hvac_mode}")
+            attributes["hvac_mode"] = hvac_mode
+        next_state = str(attributes.get("hvac_mode", current.state))
+        ctx.runtime.set_state(entity.entity_id, state=next_state, attributes=attributes, context=ctx.context)
+        changed = [entity.entity_id]
+        changed.extend(
+            ctx.runtime.test_env_manager.apply_climate_temperature_links(
+                source_entity=entity,
+                temperature=target_temperature,
+                context=ctx.context,
+            )
+        )
+        return HandlerResult(changed_entity_ids=changed)
 
     def number_set_value(ctx: ServiceExecutionContext) -> HandlerResult:
         entity = _single_entity(ctx)
@@ -775,6 +1127,8 @@ def register_builtin_handlers(registry: HandlerRegistry) -> None:
         "builtin:light.turn_on": light_turn_on,
         "builtin:light.turn_off": light_turn_off,
         "builtin:light.toggle": light_toggle,
+        "builtin:climate.set_hvac_mode": climate_set_hvac_mode,
+        "builtin:climate.set_temperature": climate_set_temperature,
         "builtin:number.set_value": number_set_value,
         "builtin:text.set_value": text_set_value,
         "builtin:select.select_first": select_first,
@@ -815,14 +1169,80 @@ class FakeHomeAssistantRuntime:
         register_builtin_handlers(self.handlers)
         self.actions = ActionRunner(self)
         self.service_engine = ServiceEngine(self)
+        self.test_env_manager = TestEnvManager(self, settings.service_seed_root.parent / "test_envs")
 
     def reload(self) -> None:
         self.registry.reload()
+        self._reconcile_builtin_service_handlers()
         self.state_store.reload()
         self.event_bus.reload()
+        self.test_env_manager.reload_definitions()
 
     def persist_all(self) -> None:
         self.state_store.persist()
+        self.storage.write_events(self.event_bus.events)
+
+    def _reconcile_builtin_service_handlers(self) -> None:
+        for key, builtin_handler in BUILTIN_SERVICE_HANDLERS.items():
+            service = self.registry.services.get(key)
+            if service is None:
+                continue
+            if service.handler != "builtin:service.not_implemented":
+                continue
+            self.registry.save_service(service.model_copy(update={"handler": builtin_handler}))
+
+    @staticmethod
+    def _copy_model_map[T: BaseModel](items: dict[str, T]) -> dict[str, T]:
+        return {key: value.model_copy(deep=True) for key, value in items.items()}
+
+    @staticmethod
+    def _copy_model_list[T: BaseModel](items: list[T]) -> list[T]:
+        return [item.model_copy(deep=True) for item in items]
+
+    def _reset_runtime_data(self, *, clear_services: bool) -> None:
+        self.registry.devices = {}
+        self.registry.entities = {}
+        self.state_store.states = {}
+        self.event_bus.events = []
+        self.storage.clear_data_files(self.storage.devices_dir)
+        self.storage.clear_data_files(self.storage.entities_dir)
+        if clear_services:
+            self.registry.services = {}
+            self.storage.clear_data_files(self.storage.services_dir)
+        self.storage.write_states({})
+        self.storage.write_events([])
+
+    def apply_test_environment(self, env: TestEnvironmentDefinition) -> None:
+        self._reset_runtime_data(clear_services=False)
+        for device in env.devices:
+            self.registry.save_device(device.model_copy(deep=True))
+        for entity in env.entities:
+            entity_copy = entity.model_copy(deep=True)
+            self.registry.save_entity(entity_copy)
+            self.state_store.ensure_entity(entity_copy)
+        for initial in env.initial_states:
+            self.state_store.upsert(
+                initial.entity_id,
+                state=initial.state,
+                attributes=initial.attributes,
+                merge_attributes=True,
+                context=self.state_store.new_context(),
+                persist=False,
+            )
+        self.state_store.persist()
+        self.storage.write_events([])
+
+    def restore_snapshot(self, snapshot: RuntimeSnapshot) -> None:
+        self._reset_runtime_data(clear_services=True)
+        for service in snapshot.services.values():
+            self.registry.save_service(service.model_copy(deep=True))
+        for device in snapshot.devices.values():
+            self.registry.save_device(device.model_copy(deep=True))
+        for entity in snapshot.entities.values():
+            self.registry.save_entity(entity.model_copy(deep=True))
+        self.state_store.states = self._copy_model_map(snapshot.states)
+        self.state_store.persist()
+        self.event_bus.events = self._copy_model_list(snapshot.events)
         self.storage.write_events(self.event_bus.events)
 
     def set_state(
