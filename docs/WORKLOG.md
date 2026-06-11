@@ -7,6 +7,11 @@
   测试/接入影响：新增独立单元测试；后续由 demo 侧适配接入。
   文档更新：已同步新增本工作记录，并更新根 README 的记忆模块说明。
 
+- 模块：`try/memory` / `iot-agent-refactored_demo`
+  核心改动：将对话记忆抽取升级为 LLM structured extractor，将多候选设备绑定升级为“小候选集 LLM 消歧”，保留启发式逻辑作为 fallback。
+  测试/接入影响：新增 LLM 抽取与 LLM 消歧单测，demo runtime 默认使用 LLM 版 extractor/disambiguator。
+  文档更新：已同步记录到本工作记录，并更新根 README 的记忆模块说明。
+
 - 模块：`iot-agent-refactored_demo/smartHome/m_agent/memory`
   核心改动：新增 demo memory runtime，负责加载 Memory V1、同步 HA、写入样例 seed 记忆、跟踪任务级 memory usage。
   测试/接入影响：`query_tool` 从静态文本切换为真实 memory 检索；`base_home_agent` 增加任务开始/结束的记忆生命周期钩子。
