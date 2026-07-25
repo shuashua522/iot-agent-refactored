@@ -101,3 +101,11 @@
 - 建立正式结果隔离根目录 `experiments/results/formal`，并在该根上完成 full formal run：`configured_oracle_formal` 30 seeds、`configured_agent_formal` 20 seeds、`configured_baseline_formal` 30 seeds、`configured_ablation_formal` 20 seeds。
 - 在正式根上重建 `generate_tables.py`、`generate_figures.py`、`generate_significance.py`、`generate_statistics.py`、`generate_report.py` 与 `generate_run_index.py`，`docs/实验结果摘要.md` 已切换为 formal 结果摘要并标注 seed 数已达标、进入最终审计。
 - 对 formal 根执行 trace / manifest 一致性审计，确认 `run_index`、`failed_task_ids`、`task_success` 与 `outcome` 逐项一致，formal 结果可追溯链闭合。
+- 复核旧 formal 后确认其不能作为论文最终结果：存在 Oracle seed 伪独立、TSR 与 final-state 口径不一致、B0/B4 等价、Agent 文本特判、人工双标注为空以及正式主表为空等问题。
+- 为所有包含物理动作的场景补充显式 `expect_final_state`，runner 改为累积多动作最终状态；不适用指标保留 `None`，新增 `State TSR`。
+- 重构 SRR、MP、DMR、RRR、UC、WDR、CE 与成本字段口径；Oracle 统计单位改为 scenario，显著性使用场景级 paired exact sign test 与分层 Holm 校正，估算 token 字段明确标为 `Estimated`。
+- 做实 B4 全量历史路径并验证其不再等同 B0；B5 保持 recency + importance + relevance 打分。
+- 移除 Agent 对“观影模式/睡前模式”等文本硬编码，改为通用检索包 fallback，并在 trace/manifest 中标记 `heuristic_fallback`，不作为确认性 Agent 结果。
+- 新增人工标注模板状态、`compute_annotation_agreement.py`、`audit_mechanism_sensitivity.py` 与 `audit_results.py`；空人工标注保持 κ 为 null，不生成虚假一致性。
+- 修复 `table_1.csv` / `table_2.csv` 的 dev run id 硬编码，扩展 multi-seed manifest，并把正式结果链回归提升到 52 个测试全部通过。
+- 根据最终口径修正《师兄写的记忆实现方案.md》：SQLite/canonical database 加确定性检索即满足要求，不要求 Chroma 或其他向量数据库。
