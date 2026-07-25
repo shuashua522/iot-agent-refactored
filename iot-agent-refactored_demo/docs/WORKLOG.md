@@ -72,3 +72,4 @@
 - 继续补充薄场景回归：新增 `test_thin_specs`，让 A1/B3/B4/E2 的字段级断言也进入自动化回归，并在结果摘要中留下对应开发态记录。
 - 继续补充 query/automation 薄场景回归：新增 `test_query_automation_thin_specs`，让 H1/H2/C1/C4 的字段级断言也进入自动化回归，并在结果摘要中留下对应开发态记录。
 - 继续补充变更/缺失薄场景回归：新增 `test_mutation_and_absence_thin_specs`，让 D1/D2/G1/G5 的字段级断言也进入自动化回归，并在结果摘要中留下对应开发态记录。
+- 继续补充关系修订/冲突/涟漪薄场景回归：进一步收紧 `D3/F1/F2/F4` 的字段级断言，并复跑现有 `test_relation_conflict_and_ripple_paths`。
