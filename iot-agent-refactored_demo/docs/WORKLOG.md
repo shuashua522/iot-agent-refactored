@@ -87,3 +87,5 @@
 - 继续补强结果目录可追溯性：`batch_run` 的 `manifest.json` 现在补入了 `resolved_config`、`generated_at` 与 `failed_task_ids`。
 - 补齐 `generate_run_index.py` 对旧 `manifest.json` 的 `generated_at` 回退逻辑，并重新生成 `experiments/results/reports/dev/run_index.json`，让索引清单中的时间戳不再为空。
 - 同步更新 `docs/实验实现进展.md`，记录当前阶段已收口完成，可先暂停在这里。
+- 补齐场景标注元数据链：`sync_ground_truth.py` 现在会把 `title` / `category` / `rq_tags` 一并写入 `scenario_ground_truth`，并修正了 `A1` 缺失的 `rq_tags`。
+- 清理配置化整链入口：`run_all_configured.py` 去掉了重复执行 `generate_run_index.py` 的冗余步骤，并同步更新对应 smoke 断言。
