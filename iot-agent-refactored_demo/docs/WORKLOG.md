@@ -114,3 +114,11 @@
 - formal_v2 `artifact_audit.json` 状态为 `pass`、无 failure，确认性范围为 `oracle_only`；Agent 明确为 `heuristic_fallback`，人工双标注仍为 pending。
 - 最终 Oracle Ours 结果为 TSR=1.0000（31场景）、State TSR=1.0000（15个适用场景）、WDR=0、CB=0.4516、PM=1.0000；统计使用场景级 paired exact sign test 与分层 Holm 校正。
 - 机制敏感性审计确认 `-AsymFeedback` 与 `-FeatureAbsorption` 在当前测试集上无可观察行为差异，论文必须诚实报告而不能制造退化。
+- 重构 `experiments/planners/agent_planner.py` 为实验侧 `plan-only` real-LLM adapter：真实模型只负责输出结构化 JSON 计划，动作执行统一回到 `HAOracle/wm-v1` runner，避免沿用原始 Agent 的 HTTP Home Assistant 执行路径。
+- 扩展 `CandidateDevice` 与 `TaskTrace`：补入 `entity_type`、`capabilities`、`available_services`、`current_state`、结构化决策、tool calls、usage metadata、latency、failure type、动作序列与执行结果等审计字段。
+- 调整 `run_agent_scenario`：当 decision 要求澄清时不再偷偷补执行动作；真实 external-LLM 决策、usage 与执行结果现在都会显式落入 trace。
+- 为 real-LLM adapter 补充 7 条零成本 stub/smoke 回归，并复跑 `python3 -m unittest experiments.tests.test_smoke`，当前总数提升到 `59/59` 全部通过。
+- 使用现有 Conda 环境完成 1 次最小真实 API smoke，请求与脱敏结果写入 `experiments/results/agent_llm_smoke/api_smoke.json`，确认可收到非空响应和真实 usage metadata。
+- 在独立目录 `experiments/results/agent_llm_smoke/` 完成 `G1 / E1 / B6 / E2 / E3` 五个 Agent 场景的单-seed 真实 external-LLM 验证，全部 `task_success=true`，且 `agent_backend=external_llm`。
+- 新增并回填 real-LLM candidate manifest：`experiments/results/agent_llm_smoke/reports/real_llm_candidate_20260725/Ours/agent/manifest.json`，记录场景数、seed 数、backend、model/provider、API 调用数与 token usage，总计 5 个场景、9 次场景内调用、`9400` tokens。
+- 同步更新 `docs/实验实现进展.md`、`docs/实验结果摘要.md` 与 `docs/论文最终实验结果封版计划.md`，明确区分 `heuristic_fallback` 与 `real_llm_smoke / real_llm_candidate`，避免论文口径混写。
