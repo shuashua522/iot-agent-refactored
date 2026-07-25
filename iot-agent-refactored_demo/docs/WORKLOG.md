@@ -51,6 +51,8 @@
 
 ## 2026-07-25
 
+- 新增《论文最终实验结果封版计划.md》，将当前开发态原型推进到论文正式结果所需的工作拆分为 P0-P7 阶段，并明确成功判定、36 场景覆盖、正式多 seed、统计审计、可复现封版和论文写入的验收门槛。
+
 - 修正实验主线对 Python 3.9 的兼容性：将 `experiments/memory/schemas.py` 与 `experiments/trace/schemas.py` 中会触发 pydantic 导入失败的联合类型注解改为兼容写法，恢复 `python3 -m unittest experiments.tests.test_smoke` 可执行。
 - 继续补齐 `usable-stale` 运行时语义：当前 stale 记忆已支持“查询可用、控制仅可用于澄清”的区分，成功验证后会回迁为 `active`，并把 `runtime_status` 写入 trace。
 - 扩大回归覆盖：新增 stale 澄清语义与 stale→active 回迁的 smoke tests，并将总 smoke tests 数量更新到 29。
