@@ -84,3 +84,4 @@
 - 继续补强未单独覆盖的高价值场景：新增 `test_candidate_isolation_resampling_split_thin_specs`，把 `A3/A4/F5` 的 candidate 隔离、重采样恢复与 split 歧义处理纳入独立 smoke，并同步结果摘要。
 - 继续补强比较统计链：`generate_significance.py` 现在除了 bootstrap delta 外，还会输出 `Cohen's d` 与 Holm 校正 p 值，`docs/实验结果摘要.md` 也同步展示这些字段。
 - 继续补强比较统计链：`generate_statistics.py` 现在也会合并 `Cohen's d` 与 Holm 校正 p 值，让统计摘要 JSON/CSV 与比较型统计保持一致。
+- 继续补强结果目录可追溯性：`batch_run` 的 `manifest.json` 现在补入了 `resolved_config`、`generated_at` 与 `failed_task_ids`。
