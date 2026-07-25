@@ -70,3 +70,4 @@
 - 继续补齐失活治理：`resampling` 现会保留 `resampled_from` / `resampled_at` 的可追溯字段，并补充对应 smoke test。
 - 继续把薄场景补成更细粒度断言：`A1/B3/B4/E2` 现已增加字段级 `expect_memory` 断言，并重新同步 `scenario_ground_truth`，总 smoke tests 更新到 37。
 - 继续补充薄场景回归：新增 `test_thin_specs`，让 A1/B3/B4/E2 的字段级断言也进入自动化回归，并在结果摘要中留下对应开发态记录。
+- 继续补充 query/automation 薄场景回归：新增 `test_query_automation_thin_specs`，让 H1/H2/C1/C4 的字段级断言也进入自动化回归，并在结果摘要中留下对应开发态记录。
