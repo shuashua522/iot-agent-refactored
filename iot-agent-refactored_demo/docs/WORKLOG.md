@@ -59,3 +59,6 @@
 - 继续补齐反馈链的真实语义：`mark_outcome` 现已支持沿关系链传播负向 ripple，按 1 跳 `0.3`、2 跳 `0.09` 衰减，并在 3 跳处截断；`F3/F4` 场景已从手工 `patch` 改为真实机制触发。
 - 同步运行 `sync_ground_truth.py`，让 `scenario_ground_truth` 跟随最新的 F3/F4 场景脚本更新。
 - 继续扩大回归覆盖：新增真实 ripple 传播 smoke test，并将总 smoke tests 数量更新到 30。
+- 继续补齐 `F5/F6` 的真实语义：`maintenance` 事件现已支持脚本化 `memory_ops`，`split` 会保留 `supersedes / derived_from_memory_ids` 与 specialize/generalize edge，`merge` 会保留 `coverage_proof` 与 `evidence_refs` 并集。
+- 同步运行 `sync_ground_truth.py`，让 `scenario_ground_truth/F5.json` 与 `F6.json` 跟随最新场景脚本更新。
+- 继续扩大回归覆盖：新增 split lineage / edge 与 merge evidence union 的 smoke tests，并将总 smoke tests 数量更新到 32。
