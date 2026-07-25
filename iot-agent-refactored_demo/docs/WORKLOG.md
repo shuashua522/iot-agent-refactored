@@ -56,3 +56,6 @@
 - 扩大回归覆盖：新增 stale 澄清语义与 stale→active 回迁的 smoke tests，并将总 smoke tests 数量更新到 29。
 - 修正 `generate_report.py` 中的硬编码日期，`docs/实验结果摘要.md` 现会按运行当天生成日期。
 - 同步更新 `docs/实验实现进展.md`，反映 Saturday, July 25, 2026 这轮代码状态、测试数量和新增语义。
+- 继续补齐反馈链的真实语义：`mark_outcome` 现已支持沿关系链传播负向 ripple，按 1 跳 `0.3`、2 跳 `0.09` 衰减，并在 3 跳处截断；`F3/F4` 场景已从手工 `patch` 改为真实机制触发。
+- 同步运行 `sync_ground_truth.py`，让 `scenario_ground_truth` 跟随最新的 F3/F4 场景脚本更新。
+- 继续扩大回归覆盖：新增真实 ripple 传播 smoke test，并将总 smoke tests 数量更新到 30。
