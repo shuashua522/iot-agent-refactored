@@ -127,4 +127,5 @@
 - `B6@1002` 首次真实 external-LLM 尝试因过度保守澄清而失败；离线定位后只重试 1 次，成功结果写入 `b6_seed1002_real_llm_retry1`，失败首次尝试保留在 `b6_seed1002_real_llm`，额外消耗 `1494` tokens。
 - 新增 `experiments/scripts/consolidate_agent_llm_smoke.py`，可将隔离的单场景 real-LLM run 聚合为 consolidated multi-seed candidate；并生成 `real_llm_candidate_20260725_two_seed` 的 `manifest.json`、`audit.json`、`comparison.json` 与 `metrics.by_seed/by_scenario/summary`。
 - 当前 `real_llm_candidate_20260725_two_seed` 覆盖 `G1 / E1 / B6 / E2 / E3` 共 5 个 agent 场景、2 个固定 seeds、10/10 成功 trace，成功 trace 共 `18` 次调用、`18477` tokens；仍明确保留为 `real_llm_candidate`，不包装成论文最终封版结果。
+- 新增 `experiments/scripts/audit_real_llm_seal_readiness.py`，对 two-seed candidate 输出机器可读的封版就绪度审计；当前结论为 `candidate_only`，主要缺口仍是 `seed_count < 20`、source revision 不唯一与保留失败首次尝试。
 - 同步更新 `docs/实验实现进展.md`、`docs/实验结果摘要.md`、`docs/论文最终实验结果封版计划.md`，记录 two-seed candidate 的成本、限制、比较边界与下一步扩量门槛。
