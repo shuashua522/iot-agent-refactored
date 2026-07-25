@@ -82,3 +82,4 @@
 - 继续细化 `D2` capability 失效后的回退执行：在 `D2` 中补上澄清后的“只开客厅顶灯”路径，并新增 `test_capability_routine_fallback_thin_specs` 专门覆盖该回归。
 - 继续细化 `F5` 的 split 语义：在 `F5` 中补上分裂后对“开客厅灯”的澄清与静默断言，进一步约束宽泛 alias 分裂后的歧义处理。
 - 继续补强未单独覆盖的高价值场景：新增 `test_candidate_isolation_resampling_split_thin_specs`，把 `A3/A4/F5` 的 candidate 隔离、重采样恢复与 split 歧义处理纳入独立 smoke，并同步结果摘要。
+- 继续补强比较统计链：`generate_significance.py` 现在除了 bootstrap delta 外，还会输出 `Cohen's d` 与 Holm 校正 p 值，`docs/实验结果摘要.md` 也同步展示这些字段。
