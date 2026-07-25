@@ -68,3 +68,5 @@
 - 继续收紧 `merge` / `reflection` 语义：`coverage_proof` 现会按 `source_ids` 自动补全并校验，缺失或不完整时会在维护阶段回滚；同时补充 `reflection` candidate 晋升 smoke test，并将总 smoke tests 数量更新到 35。
 - 继续补齐检索上下文：`SearchResultPackage.global_constraints` 现会携带 preference / routine / reflection 约束记忆，并补充对应 smoke test。
 - 继续补齐失活治理：`resampling` 现会保留 `resampled_from` / `resampled_at` 的可追溯字段，并补充对应 smoke test。
+- 继续把薄场景补成更细粒度断言：`A1/B3/B4/E2` 现已增加字段级 `expect_memory` 断言，并重新同步 `scenario_ground_truth`，总 smoke tests 更新到 37。
+- 继续补充薄场景回归：新增 `test_thin_specs`，让 A1/B3/B4/E2 的字段级断言也进入自动化回归，并在结果摘要中留下对应开发态记录。
