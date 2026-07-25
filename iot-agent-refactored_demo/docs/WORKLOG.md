@@ -109,3 +109,8 @@
 - 新增人工标注模板状态、`compute_annotation_agreement.py`、`audit_mechanism_sensitivity.py` 与 `audit_results.py`；空人工标注保持 κ 为 null，不生成虚假一致性。
 - 修复 `table_1.csv` / `table_2.csv` 的 dev run id 硬编码，扩展 multi-seed manifest，并把正式结果链回归提升到 52 个测试全部通过。
 - 根据最终口径修正《师兄写的记忆实现方案.md》：SQLite/canonical database 加确定性检索即满足要求，不要求 Chroma 或其他向量数据库。
+- 提交 formal_v2 冻结口径，代码 revision 为 `2aed34c`；随后在独立 `experiments/results/formal_v2` 根完成全量运行。
+- formal_v2 产出 17 个 consolidated manifest、12,500 条任务 trace、12,500 条 maintenance trace、5 张非空表和 5 份图数据，所有 manifest 均绑定 `2aed34c`。
+- formal_v2 `artifact_audit.json` 状态为 `pass`、无 failure，确认性范围为 `oracle_only`；Agent 明确为 `heuristic_fallback`，人工双标注仍为 pending。
+- 最终 Oracle Ours 结果为 TSR=1.0000（31场景）、State TSR=1.0000（15个适用场景）、WDR=0、CB=0.4516、PM=1.0000；统计使用场景级 paired exact sign test 与分层 Holm 校正。
+- 机制敏感性审计确认 `-AsymFeedback` 与 `-FeatureAbsorption` 在当前测试集上无可观察行为差异，论文必须诚实报告而不能制造退化。
