@@ -74,3 +74,4 @@
 - 继续补充变更/缺失薄场景回归：新增 `test_mutation_and_absence_thin_specs`，让 D1/D2/G1/G5 的字段级断言也进入自动化回归，并在结果摘要中留下对应开发态记录。
 - 继续补充关系修订/冲突/涟漪薄场景回归：进一步收紧 `D3/F1/F2/F4` 的字段级断言，并复跑现有 `test_relation_conflict_and_ripple_paths`。
 - 继续补充修订/有效期/安全偏好薄场景回归：新增 `test_revision_validity_and_safety_thin_specs`，让 `A2/A5/B1/B6/C2/C3` 的字段级断言也进入自动化回归，并在结果摘要中留下对应开发态记录。
+- 继续补充噪声/阈值薄场景回归：新增 `test_noise_and_threshold_thin_specs`，让 `G2/G3/G4` 的字段级断言也进入自动化回归，并在结果摘要中留下对应开发态记录。
