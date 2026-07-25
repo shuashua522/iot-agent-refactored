@@ -66,3 +66,4 @@
 - 同步运行 `sync_ground_truth.py`，让 `scenario_ground_truth/B2.json` 与 `B5.json` 跟随最新场景脚本更新。
 - 继续扩大回归覆盖：新增 candidate 晋升窗口规则的 smoke test，并将总 smoke tests 数量更新到 33。
 - 继续收紧 `merge` / `reflection` 语义：`coverage_proof` 现会按 `source_ids` 自动补全并校验，缺失或不完整时会在维护阶段回滚；同时补充 `reflection` candidate 晋升 smoke test，并将总 smoke tests 数量更新到 35。
+- 继续补齐检索上下文：`SearchResultPackage.global_constraints` 现会携带 preference / routine / reflection 约束记忆，并补充对应 smoke test。
