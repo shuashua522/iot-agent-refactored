@@ -85,3 +85,5 @@
 - 继续补强比较统计链：`generate_significance.py` 现在除了 bootstrap delta 外，还会输出 `Cohen's d` 与 Holm 校正 p 值，`docs/实验结果摘要.md` 也同步展示这些字段。
 - 继续补强比较统计链：`generate_statistics.py` 现在也会合并 `Cohen's d` 与 Holm 校正 p 值，让统计摘要 JSON/CSV 与比较型统计保持一致。
 - 继续补强结果目录可追溯性：`batch_run` 的 `manifest.json` 现在补入了 `resolved_config`、`generated_at` 与 `failed_task_ids`。
+- 补齐 `generate_run_index.py` 对旧 `manifest.json` 的 `generated_at` 回退逻辑，并重新生成 `experiments/results/reports/dev/run_index.json`，让索引清单中的时间戳不再为空。
+- 同步更新 `docs/实验实现进展.md`，记录当前阶段已收口完成，可先暂停在这里。
