@@ -62,3 +62,7 @@
 - 继续补齐 `F5/F6` 的真实语义：`maintenance` 事件现已支持脚本化 `memory_ops`，`split` 会保留 `supersedes / derived_from_memory_ids` 与 specialize/generalize edge，`merge` 会保留 `coverage_proof` 与 `evidence_refs` 并集。
 - 同步运行 `sync_ground_truth.py`，让 `scenario_ground_truth/F5.json` 与 `F6.json` 跟随最新场景脚本更新。
 - 继续扩大回归覆盖：新增 split lineage / edge 与 merge evidence union 的 smoke tests，并将总 smoke tests 数量更新到 32。
+- 继续把 candidate 晋升从简化阈值补成 7 天窗口 / 无反例规则，并把 `B2/B5` 场景改成更完整的多次观测序列。
+- 同步运行 `sync_ground_truth.py`，让 `scenario_ground_truth/B2.json` 与 `B5.json` 跟随最新场景脚本更新。
+- 继续扩大回归覆盖：新增 candidate 晋升窗口规则的 smoke test，并将总 smoke tests 数量更新到 33。
+- 继续收紧 `merge` / `reflection` 语义：`coverage_proof` 现会按 `source_ids` 自动补全并校验，缺失或不完整时会在维护阶段回滚；同时补充 `reflection` candidate 晋升 smoke test，并将总 smoke tests 数量更新到 35。
