@@ -13,3 +13,46 @@
 - 补充全部核心指标公式、trace 字段映射与统计检验规则，避免不同实现对指标口径产生分歧。
 - 固化检索评分子项、冲突评分子项、ECE 分桶、MP 分母、CE 准确率定义与 maintenance 成本口径。
 - 补充 `usable-stale` 的正式定义、场景 YAML 统一模板，以及 36 个场景的逐条展开要求，进一步收敛实现者对脚本结构和统计口径的理解。
+- 新增 `experiments/` 实验主线第一版代码骨架，包含 memory/world/planner/runner/trace/metrics/config/scripts/tests，并新增 `docs/实验实现进展.md` 记录真实完成情况与后续缺口。
+- 继续补充实验主线代码：接入 agent runner 过渡路径、批量结果产物（per-scenario/manifest/figure）、基础 system config 开关，并完成 smoke、batch、ablation 与 `unittest` 验证。
+- 继续强化实验主线：补充 registry fallback、死记忆最小治理逻辑、baseline 运行入口、更多 smoke tests，以及主实验/表图导出脚本的真实产物链。
+- 继续补充系统变体与结果导出：接入 B4/B5 与完整消融集合、真实配置开关、usage/grounding 反馈链，并修正表格导出对不同阶段 metrics 字段的兼容性。
+- 补充 maintenance trace 与独立 `.maintenance.json` 结果产物，并验证主实验分流、自动化测试和结果导出在该改动后仍可运行。
+- 继续细化关键场景实现，补上 candidate 晋升、alias revise、merge rollback 等路径，并把这些路径写入新增 smoke tests 与进度文档。
+- 补充开发态一键运行脚本 `run_all_dev.py`，并增强 `manifest.json` 的可追溯元数据（git revision、world version、maintenance trace 清单）。
+- 继续扩大回归覆盖：新增 agent 安全与高价值偏好 smoke test，并同步更新进度文档中的已跑通场景和测试数量。
+- 继续扩大回归覆盖：新增 query/control 阈值分层，以及纠错/时间窗口/干扰项鲁棒性的 smoke tests。
+- 继续扩大回归覆盖：新增 D3/F1/F2/F3/F4 这一组关系修订、冲突与传播路径的 smoke test。
+- 同步更新实验实现进展文档，反映当前已接入的 baseline/ablation 全集，以及 `PM/UAA/maintenance latency` 已开始产生真实结果信号。
+- 新增 `sync_ground_truth.py`，支持根据场景脚本自动重建 `scenario_ground_truth`，降低脚本与标注文件偏离风险。
+- 继续补充执行闭环：在 runner 中为执行失败自动写入最小 `reflection` 记忆，并同步到进度文档。
+- 新增 `run_configured_experiments.py` 与多 seed batch 能力，开始把实验执行从单次开发态运行推进到配置驱动的重复采样模式。
+- 继续扩大 agent 回归覆盖：新增 `E1` 观影模式 routine 的 smoke test，并更新进度文档中的测试数量。
+- 继续扩大负向约束回归：新增 `G1/G5` 的 absent-memory smoke test，覆盖冷启动不凭空记忆与瞬时状态不入长期记忆。
+- 增强多 seed 运行结果：新增 `metrics.by_seed.json` 与 `metrics.summary.json`，开始让重复采样结果具备 seed 级统计视图。
+- 继续增强多 seed 运行结果：新增 `per_scenario.multi_seed.csv`，并将其纳入 smoke test。
+- 新增 `run_all_configured.py`，把配置化实验、baseline、ablation 与结果导出串成单入口执行链。
+- 新增 `generate_report.py`，支持根据当前 `aggregated_metrics` 自动生成 `docs/实验结果摘要.md`。
+- 同步更新实验实现进展文档：记录 `RRR` 已开始出现非零结果，以及当前 15 个 smoke tests 全部通过。
+- 新增 `run_configured_baselines.py` 与 `run_configured_ablations.py`，把 baseline / ablation 也推进到配置驱动、多 seed 的执行模式。
+- 扩大多 seed 回归覆盖：新增 `run_batch_multi_seed` 的 smoke test，并将总 smoke tests 数量更新到 16。
+- 增强标注资产初始化：`sync_ground_truth.py` 现已同时生成 `scenario_ground_truth` 与 `inter_annotator` 占位文件。
+- 增加容量治理回归：为 `sensitive` 记录的 `needs_review` 路径补充 smoke test，并将总 smoke tests 数量更新到 17。
+- 扩大配置化执行回归：将 `run_configured_experiments.py` 自身纳入 smoke test，并将总 smoke tests 数量更新到 19。
+- 增加标注资产回归：将 `sync_ground_truth.py` 纳入 smoke test，并将总 smoke tests 数量更新到 18。
+- 继续扩大结果链回归：将 `generate_report.py` 纳入 smoke test，并将总 smoke tests 数量更新到 20。
+- 继续扩大配置化入口回归：将 `run_configured_baselines.py` 与 `run_configured_ablations.py` 纳入 smoke test，并将总 smoke tests 数量更新到 22。
+- 继续扩大结果链回归：将 `generate_statistics.py` 纳入 smoke test，并将总 smoke tests 数量更新到 23。
+- 继续扩大配置化入口回归：将 `run_all_configured.py` 纳入 smoke test，并将总 smoke tests 数量更新到 24。
+- 继续扩大成本链回归：新增 `prompt_tokens` 非零 smoke test，并将总 smoke tests 数量更新到 25。
+- 同步更新实验实现进展文档：明确 `run_all_configured.py` 现已串起配置化实验、baseline、ablation、表图、Markdown 报告与统计摘要。
+- 新增 `generate_run_index.py`，用于自动汇总当前 `reports/` 下全部 run 的索引清单，并将其纳入 smoke test。
+- 继续扩大结果链回归：将 `generate_significance.py` 纳入 smoke test，并将总 smoke tests 数量更新到 26。
+
+## 2026-07-25
+
+- 修正实验主线对 Python 3.9 的兼容性：将 `experiments/memory/schemas.py` 与 `experiments/trace/schemas.py` 中会触发 pydantic 导入失败的联合类型注解改为兼容写法，恢复 `python3 -m unittest experiments.tests.test_smoke` 可执行。
+- 继续补齐 `usable-stale` 运行时语义：当前 stale 记忆已支持“查询可用、控制仅可用于澄清”的区分，成功验证后会回迁为 `active`，并把 `runtime_status` 写入 trace。
+- 扩大回归覆盖：新增 stale 澄清语义与 stale→active 回迁的 smoke tests，并将总 smoke tests 数量更新到 29。
+- 修正 `generate_report.py` 中的硬编码日期，`docs/实验结果摘要.md` 现会按运行当天生成日期。
+- 同步更新 `docs/实验实现进展.md`，反映 Saturday, July 25, 2026 这轮代码状态、测试数量和新增语义。
