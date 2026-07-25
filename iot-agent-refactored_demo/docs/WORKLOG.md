@@ -77,3 +77,4 @@
 - 继续补充过期/阈值薄场景回归：新增 `test_expiry_and_threshold_thin_specs`，让 `B1/B4/C2/C3` 的字段级断言也进入自动化回归，并将 `docs/实验结果摘要.md` 中对应开发态 run 重新生成入册。
 - 继续补充噪声/阈值薄场景回归：新增 `test_noise_and_threshold_thin_specs`，让 `G2/G3/G4` 的字段级断言也进入自动化回归，并在结果摘要中留下对应开发态记录。
 - 继续补充安全反思/删除薄场景回归：新增 `test_safety_reflection_and_delete_thin_specs`，让 `E3/F7` 的字段级断言也进入自动化回归，并在结果摘要中留下对应开发态记录。
+- 继续细化 `C3/G3` 场景：`C3` 补上 stale 的 query-usable 路径，`G3` 补上 capability 的 query / control 分流，并同步 `scenario_ground_truth` 与结果摘要。
