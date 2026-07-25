@@ -78,3 +78,4 @@
 - 继续补充噪声/阈值薄场景回归：新增 `test_noise_and_threshold_thin_specs`，让 `G2/G3/G4` 的字段级断言也进入自动化回归，并在结果摘要中留下对应开发态记录。
 - 继续补充安全反思/删除薄场景回归：新增 `test_safety_reflection_and_delete_thin_specs`，让 `E3/F7` 的字段级断言也进入自动化回归，并在结果摘要中留下对应开发态记录。
 - 继续细化 `C3/G3` 场景：`C3` 补上 stale 的 query-usable 路径，`G3` 补上 capability 的 query / control 分流，并同步 `scenario_ground_truth` 与结果摘要。
+- 继续细化 `C1` 与 habit 阈值回归：`C1` 补上到期后的 `expect_no_action` 静默断言，`B5` 进入新的 `habit / routine` 联合回归，并同步结果摘要与 `scenario_ground_truth/C1.json`。
