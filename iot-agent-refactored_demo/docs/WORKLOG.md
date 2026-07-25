@@ -122,3 +122,9 @@
 - 在独立目录 `experiments/results/agent_llm_smoke/` 完成 `G1 / E1 / B6 / E2 / E3` 五个 Agent 场景的单-seed 真实 external-LLM 验证，全部 `task_success=true`，且 `agent_backend=external_llm`。
 - 新增并回填 real-LLM candidate manifest：`experiments/results/agent_llm_smoke/reports/real_llm_candidate_20260725/Ours/agent/manifest.json`，记录场景数、seed 数、backend、model/provider、API 调用数与 token usage，总计 5 个场景、9 次场景内调用、`9400` tokens。
 - 同步更新 `docs/实验实现进展.md`、`docs/实验结果摘要.md` 与 `docs/论文最终实验结果封版计划.md`，明确区分 `heuristic_fallback` 与 `real_llm_smoke / real_llm_candidate`，避免论文口径混写。
+- 为 external-LLM Agent 补充 `safety_execution_hint` prompt 规则，使 `B6` 这类高 `memory_worth`、强 grounding、唯一单动作的 safety 场景可在 prompt 中被明确标记为直接执行；同时新增对应 smoke test，`python3 -m unittest experiments.tests.test_smoke` 总数提升到 `60/60` 全部通过。
+- 串行补跑第二个固定 seed：在 `experiments/results/agent_llm_smoke/` 下新增 `G1 / E1 / B6 / E2 / E3 @ seed=1002` 的真实 external-LLM 结果，成功部分共 `9` 次调用、`9077` tokens。
+- `B6@1002` 首次真实 external-LLM 尝试因过度保守澄清而失败；离线定位后只重试 1 次，成功结果写入 `b6_seed1002_real_llm_retry1`，失败首次尝试保留在 `b6_seed1002_real_llm`，额外消耗 `1494` tokens。
+- 新增 `experiments/scripts/consolidate_agent_llm_smoke.py`，可将隔离的单场景 real-LLM run 聚合为 consolidated multi-seed candidate；并生成 `real_llm_candidate_20260725_two_seed` 的 `manifest.json`、`audit.json`、`comparison.json` 与 `metrics.by_seed/by_scenario/summary`。
+- 当前 `real_llm_candidate_20260725_two_seed` 覆盖 `G1 / E1 / B6 / E2 / E3` 共 5 个 agent 场景、2 个固定 seeds、10/10 成功 trace，成功 trace 共 `18` 次调用、`18477` tokens；仍明确保留为 `real_llm_candidate`，不包装成论文最终封版结果。
+- 同步更新 `docs/实验实现进展.md`、`docs/实验结果摘要.md`、`docs/论文最终实验结果封版计划.md`，记录 two-seed candidate 的成本、限制、比较边界与下一步扩量门槛。
