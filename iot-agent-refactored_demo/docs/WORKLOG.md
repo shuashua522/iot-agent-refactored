@@ -51,6 +51,11 @@
 
 ## 2026-07-25
 
+- 继续收紧实验主线的任务成功判定：`TaskTrace` 现已记录 `assertion_results`、`action_success`、`clarification_success`、`memory_assertion_success`、`final_state_success` 与 `task_success`，`TSR` 改为以任务级成功为准，避免最终状态与语义失败脱钩。
+- 继续补齐 planner / runner 语义：`OraclePlanner` 现区分 `query`、`automation`、`control` 三类任务；`query` 返回 `memory.answer`，`automation` 在无可用记忆时静默不执行，`control` 在无可用记忆时优先澄清。
+- 继续补齐时间窗与生命周期门控：`refresh_status` 现会处理 `valid_from` 前的未生效记忆，`expect_no_action` 现在只检查是否产生动作，不再把“是否澄清”混入同一断言。
+- 继续补齐场景封版缺口：`A1` 的动作模板已补到真实执行步，`sync_ground_truth.py`、`scenario_ground_truth` 与当前脚本结构保持一致。
+- 当前 smoke 仍有少量场景在执行语义和标注粒度上未完全对齐，已记录到 `docs/实验实现进展.md`，下一轮继续收口。
 - 新增《论文最终实验结果封版计划.md》，将当前开发态原型推进到论文正式结果所需的工作拆分为 P0-P7 阶段，并明确成功判定、36 场景覆盖、正式多 seed、统计审计、可复现封版和论文写入的验收门槛。
 
 - 修正实验主线对 Python 3.9 的兼容性：将 `experiments/memory/schemas.py` 与 `experiments/trace/schemas.py` 中会触发 pydantic 导入失败的联合类型注解改为兼容写法，恢复 `python3 -m unittest experiments.tests.test_smoke` 可执行。
@@ -91,3 +96,8 @@
 - 同步更新 `docs/实验实现进展.md`，记录当前阶段已收口完成，可先暂停在这里。
 - 补齐场景标注元数据链：`sync_ground_truth.py` 现在会把 `title` / `category` / `rq_tags` 一并写入 `scenario_ground_truth`，并修正了 `A1` 缺失的 `rq_tags`。
 - 清理配置化整链入口：`run_all_configured.py` 去掉了重复执行 `generate_run_index.py` 的冗余步骤，并同步更新对应 smoke 断言。
+- 继续收口软过期场景口径：`C3` 的 `stale` 记忆层级从 `active` 对齐为 `dormant`，并重新同步 `scenario_ground_truth/C3.json`，避免生命周期状态和场景断言冲突。
+- 复跑 `python3 -m unittest experiments.tests.test_smoke`，48 个 smoke tests 全部通过，`test_expiry_and_threshold_thin_specs` 与 `test_revision_validity_and_safety_thin_specs` 的 `C3` 回归已收口。
+- 建立正式结果隔离根目录 `experiments/results/formal`，并在该根上完成 full formal run：`configured_oracle_formal` 30 seeds、`configured_agent_formal` 20 seeds、`configured_baseline_formal` 30 seeds、`configured_ablation_formal` 20 seeds。
+- 在正式根上重建 `generate_tables.py`、`generate_figures.py`、`generate_significance.py`、`generate_statistics.py`、`generate_report.py` 与 `generate_run_index.py`，`docs/实验结果摘要.md` 已切换为 formal 结果摘要并标注 seed 数已达标、进入最终审计。
+- 对 formal 根执行 trace / manifest 一致性审计，确认 `run_index`、`failed_task_ids`、`task_success` 与 `outcome` 逐项一致，formal 结果可追溯链闭合。
