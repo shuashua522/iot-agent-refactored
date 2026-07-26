@@ -168,3 +168,6 @@
 - 启动第一次阶段 A 正式 run：`experiments/results/strict_main_agent_final_20260726_v1/` 在 frozen revision `b6ee62b` 上串行执行 `seed=1001`，跑到 `22/252` 时在 `B0/F1/1001` 停止，原因是 `F1` 这类无 `say` 步的 agent 场景在 trace 中保留了 `agent_backend=null`，被 strict check 误判为后端错误。
 - 修复 agent no-op 场景协议：当 agent 路径场景本身不需要 planner 调用时，trace 现在会保留 `agent_backend=external_llm`，并把 `agent_seed_protocol` 标记为 `no_agent_call_required`，避免把“零调用”误报成“错误后端”。
 - 为上述 no-op agent 场景协议补充 smoke，并复跑 `python3 -m unittest experiments.tests.test_smoke`，当前总数提升到 `70/70` 全部通过；同时复跑 `python3 -m compileall -q experiments` 通过。
+- 启动第二次阶段 A 正式 run：`experiments/results/strict_main_agent_final_20260726_v2/` 在 frozen revision `df7b67d` 上串行执行 `seed=1001`，成功越过 `F1` 阻断点并推进到 `35/252`，随后在 `B0/H2/1001` 暴露出新的执行层缺口。
+- 修复模型坏动作的执行层容错：当模型输出缺少必需参数或其他无效 service/args 时，runner 现在会把它记录为失败动作和行为失败，而不是抛 Python 异常打断整轮 run。
+- 为上述坏动作容错补充 smoke，并复跑 `python3 -m unittest experiments.tests.test_smoke`，当前总数提升到 `71/71` 全部通过；同时复跑 `python3 -m compileall -q experiments` 通过。
