@@ -157,3 +157,8 @@
 - `strict_agent_pilot_20260726_v3` 当前真实行为结果为：`G1` success、`D3` success、`E1` success、`F2` success、`C1` failure；其中 `C1` 的失败是模型漏掉了有效窗口内本应执行的动作，而不是过期后误执行。
 - 生成 `experiments/results/strict_serial_pilot_v3/reports/strict_agent_pilot_20260726_v3/strict_main_agent.strict_audit.json` 与 `strict_main_agent.cost_estimate.json`：当前 audit 状态为 `partial`、无 fallback / mixed revision / missing trace；基于 `v3` 样本外推，full-grid 主实验约为 `13608` 次调用、`17592120` total tokens。
 - 同步更新 `docs/实验结果摘要.md`、`docs/实验实现进展.md` 与 `docs/论文最终实验结果封版计划.md`，把 `strict_agent_pilot_20260726_v3` 作为当前最新 clean-revision pilot 记录入册，并明确 `v2/v3` 成本外推差异较大、full-grid 预算仍需更多代表场景校准。
+- 将 `experiments/trace/writer.py` 改为同目录临时文件 + 原子替换写入，减少 paid run 中断时留下半个 JSON 导致 resume 误判的风险。
+- 强化 `experiments/scripts/run_strict_serial_unit.py` 的 `--resume` 语义：不再因任意单个产物存在就跳过，而是要求 `trace + maintenance + manifest` 三件套都可解析、路径一致、strict checks 通过；否则自动进入 repair rerun。
+- 重写 `experiments/scripts/run_strict_group.py` 为 bounded-concurrency 协调器：支持单协调器并发调度、阶段性原子 `group_run_summary.json`、API call / token 预算统计、技术性传输故障有限重试、指数退避与自动降并发。
+- 扩展 `experiments/scripts/audit_strict_experiment.py`，把 maintenance trace 缺失或损坏纳入 strict audit 范围，避免只审 trace / manifest 而漏掉第三件关键产物。
+- 为以上 strict execution safety 改动补充 smoke：覆盖“半残结果不能被 resume 误跳过”和“group runner 的并发 summary 协议”，并复跑 `python3 -m unittest experiments.tests.test_smoke`，当前总数提升到 `68/68` 全部通过；同时复跑 `python3 -m compileall -q experiments` 通过。
