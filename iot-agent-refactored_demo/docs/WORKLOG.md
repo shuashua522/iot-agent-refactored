@@ -140,3 +140,10 @@
 - 新增 `experiments/scripts/estimate_strict_main_cost.py`，可基于 pilot unit manifest 外推完整 `7×36×30` 主实验的调用量、token 与串行耗时，并在提供单价环境变量时输出费用区间。
 - 为上述严格矩阵 / 串行 runner / strict audit / fallback 拒绝链补充 smoke 回归，并复跑 `python3 -m unittest experiments.tests.test_smoke`，当前总数提升到 `64/64` 全部通过。
 - 同步更新 `docs/实验实现进展.md` 与 `docs/论文最终实验结果封版计划.md`，将当前状态从“停止在 Oracle confirmatory”改为“严格主实验自动化基础设施已就绪，下一步进入 clean revision 上的受控真实 LLM pilot”。
+- 发现 strict pilot 首次尝试 `strict_agent_pilot_20260726_v1 / Ours / A1 / 1001` 并未真正触发 API：`ExternalLLMClient` 对 `langchain` 存在硬依赖，初始化阶段直接退回 `heuristic_fallback`；该失败尝试结果被保留在 `experiments/results/strict_serial_pilot/` 中，仅作为技术性阻塞记录，不纳入后续 clean-revision pilot。
+- 重构 `ExternalLLMClient`：保留 `langchain` 优先路径，但在缺少该依赖时自动回退到标准库 HTTP 的 OpenAI-compatible 调用，不安装新依赖、不修改项目外环境。
+- 为新的 HTTP transport 增加 smoke test，并复跑 `python3 -m unittest experiments.tests.test_smoke`，当前总数提升到 `65/65` 全部通过。
+- 在 clean revision `0f20eab` 上启动新的 strict serial pilot：结果根为 `experiments/results/strict_serial_pilot_v2/`，run id 为 `strict_agent_pilot_20260726_v2`。
+- 当前 strict serial pilot 已完成 `Ours / A1 / C1 / H2 / B6 @ seed=1001`，以及 `B6 @ seed=1001` 的 `Ours + B0-B5` paired pilot，共 `10` 个 unit、`13` 次 API 调用、`80444` prompt tokens、`788` completion tokens、`81232` total tokens。
+- 当前 strict serial pilot 的真实行为结果为：`A1` success、`C1` success、`B6` success、`H2` failure；`B6` paired pilot 中 `B0` failure、`B1-B5` success。
+- 生成 `experiments/results/strict_serial_pilot_v2/reports/strict_agent_pilot_20260726_v2/strict_main_agent.strict_audit.json` 与 `strict_main_agent.cost_estimate.json`：当前 audit 状态为 `partial`、无 fallback / mixed revision / missing trace；full-grid 主实验外推约为 `9828` 次调用、`61411392` total tokens。
