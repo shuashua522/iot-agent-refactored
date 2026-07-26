@@ -162,3 +162,6 @@
 - 重写 `experiments/scripts/run_strict_group.py` 为 bounded-concurrency 协调器：支持单协调器并发调度、阶段性原子 `group_run_summary.json`、API call / token 预算统计、技术性传输故障有限重试、指数退避与自动降并发。
 - 扩展 `experiments/scripts/audit_strict_experiment.py`，把 maintenance trace 缺失或损坏纳入 strict audit 范围，避免只审 trace / manifest 而漏掉第三件关键产物。
 - 为以上 strict execution safety 改动补充 smoke：覆盖“半残结果不能被 resume 误跳过”和“group runner 的并发 summary 协议”，并复跑 `python3 -m unittest experiments.tests.test_smoke`，当前总数提升到 `68/68` 全部通过；同时复跑 `python3 -m compileall -q experiments` 通过。
+- 将 request-level seed 从 runner 贯通到 external LLM client，并把 `agent_requested_seed / agent_request_seed_supported / agent_request_seed_applied / agent_seed_protocol` 写入 trace 与 strict manifest，避免正式 run 后再回头解释 seed 口径。
+- 新增 `experiments/scripts/probe_external_llm_seed_support.py`，并在项目内产出 `experiments/results/seed_probe/reports/strict_seed_probe_20260726_v1/external_llm_seed_probe.json`；当前真实探测结果确认 `newapi / gpt-5.4-mini-2026-03-17 / http` 接受 request-level `seed`。
+- 为 request-level seed 链补充 smoke，并复跑 `python3 -m unittest experiments.tests.test_smoke`，当前总数提升到 `69/69` 全部通过；同时复跑 `python3 -m compileall -q experiments` 通过。
