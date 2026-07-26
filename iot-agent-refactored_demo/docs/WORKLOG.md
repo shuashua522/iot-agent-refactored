@@ -132,6 +132,10 @@
 
 ## 2026-07-26
 
+- 完成 `strict_main_agent_final_20260726_v4` 最终封版：`seed=1001-1030`、`Ours + B0-B5`、`36` 场景、`7560/7560` unit 全部落盘，`strict_main_agent.strict_audit.json` 状态为 `pass`。
+- 为上述最终封版生成 `aggregated_metrics/strict_main_agent_final_20260726_v4`、`tables/strict_main_agent_final_20260726_v4`、`figures/strict_main_agent_final_20260726_v4` 与 `reports/strict_main_agent_final_20260726_v4`，并同步更新 `docs/实验结果摘要.md`、`docs/实验实现进展.md`、`docs/WORKLOG.md`。
+- 汇总真实 API 成本：`11340` 次调用、`65,431,252` prompt tokens、`702,001` completion tokens、`66,133,253` total tokens；任务级失败主要集中在 `H2`、`C2`、`A4`、`A6`、`A2`、`D2`、`C1`。
+- 生成最终比较统计：`Ours` 在 TSR、WDR、CB、PM 与 Context Efficiency 上均优于 `B0-B5`，TSR 相对最强 baseline `B3` 仍提升约 `6.2` 个百分点，严格 paired exact sign test 的 Holm 校正 p 值保持显著。
 - 更新 `docs/实验结果摘要.md`，补入 `strict_main_agent_final_20260726_v4` 的当前真实 LLM 主实验状态，明确当前收口口径为 `seed=1012`、`1013` 已清理。
 - 按当前正式 pilot 进度继续推进 `strict_main_agent_final_20260726_v4`，并根据最新口径将结果范围收口到 `seed=1012`；`seed=1013` 的误跑结果已从结果树中清理，不纳入当前正式数据。
 - 重新整理 `strict_main_agent_final_20260726_v4` 的结果目录后，`1012` 现已形成 252/252 的完整结果，`strict_main_agent.strict_audit.json` 已重新生成并回到仅含 `1012` 的 partial 审计状态。
