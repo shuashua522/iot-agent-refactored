@@ -132,6 +132,8 @@
 
 ## 2026-07-26
 
+- 按当前正式 pilot 进度继续推进 `strict_main_agent_final_20260726_v4`，并根据最新口径将结果范围收口到 `seed=1012`；`seed=1013` 的误跑结果已从结果树中清理，不纳入当前正式数据。
+- 重新整理 `strict_main_agent_final_20260726_v4` 的结果目录后，`1012` 现已形成 252/252 的完整结果，`strict_main_agent.strict_audit.json` 已重新生成并回到仅含 `1012` 的 partial 审计状态。
 - 继续收口双 planner 语义：`_inject_registry_candidates` 现已支持 memory-grounded candidate 与 routine candidate，`retrieval_metadata` 补入 `memory_entity_map`，`OraclePlanner` / `AgentPlanner` 对 query、automation、routine 与高 `memory_worth` safety 语义已重新对齐。
 - 验证 `Ours` 在不修改场景资产的前提下，当前已可把同一套 36 场景分别以 `oracle` 和 `agent` planner 路径执行并通过断言，为严格 full-grid 主实验提供底层执行能力。
 - 新增 `experiments/scripts/build_strict_experiment_matrix.py`，并生成 `experiments/configs/strict_experiment_matrix.json`：明确 `Ours+B0-B5 × 36 × 30 = 7560` 个真实 Agent 主实验 unit、`8 ablations × 36 × 20 = 5760` 个 Oracle 消融 unit，总计 `13320` 个严格矩阵 unit。
