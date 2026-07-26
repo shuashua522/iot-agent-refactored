@@ -129,3 +129,14 @@
 - 当前 `real_llm_candidate_20260725_two_seed` 覆盖 `G1 / E1 / B6 / E2 / E3` 共 5 个 agent 场景、2 个固定 seeds、10/10 成功 trace，成功 trace 共 `18` 次调用、`18477` tokens；仍明确保留为 `real_llm_candidate`，不包装成论文最终封版结果。
 - 新增 `experiments/scripts/audit_real_llm_seal_readiness.py`，对 two-seed candidate 输出机器可读的封版就绪度审计；当前结论为 `candidate_only`，主要缺口仍是 `seed_count < 20`、source revision 不唯一与保留失败首次尝试。
 - 同步更新 `docs/实验实现进展.md`、`docs/实验结果摘要.md`、`docs/论文最终实验结果封版计划.md`，记录 two-seed candidate 的成本、限制、比较边界与下一步扩量门槛。
+
+## 2026-07-26
+
+- 继续收口双 planner 语义：`_inject_registry_candidates` 现已支持 memory-grounded candidate 与 routine candidate，`retrieval_metadata` 补入 `memory_entity_map`，`OraclePlanner` / `AgentPlanner` 对 query、automation、routine 与高 `memory_worth` safety 语义已重新对齐。
+- 验证 `Ours` 在不修改场景资产的前提下，当前已可把同一套 36 场景分别以 `oracle` 和 `agent` planner 路径执行并通过断言，为严格 full-grid 主实验提供底层执行能力。
+- 新增 `experiments/scripts/build_strict_experiment_matrix.py`，并生成 `experiments/configs/strict_experiment_matrix.json`：明确 `Ours+B0-B5 × 36 × 30 = 7560` 个真实 Agent 主实验 unit、`8 ablations × 36 × 20 = 5760` 个 Oracle 消融 unit，总计 `13320` 个严格矩阵 unit。
+- 新增 `experiments/scripts/run_strict_serial_unit.py`，提供单 `system-scenario-seed` 串行执行、不可覆盖输出、`--resume`、独立 unit manifest 与 `external_llm` 严格后端检查。
+- 新增 `experiments/scripts/audit_strict_experiment.py`，可按严格矩阵审计不完整网格、fallback 混入、mixed revision、缺失 trace 与 strict checks 失败。
+- 新增 `experiments/scripts/estimate_strict_main_cost.py`，可基于 pilot unit manifest 外推完整 `7×36×30` 主实验的调用量、token 与串行耗时，并在提供单价环境变量时输出费用区间。
+- 为上述严格矩阵 / 串行 runner / strict audit / fallback 拒绝链补充 smoke 回归，并复跑 `python3 -m unittest experiments.tests.test_smoke`，当前总数提升到 `64/64` 全部通过。
+- 同步更新 `docs/实验实现进展.md` 与 `docs/论文最终实验结果封版计划.md`，将当前状态从“停止在 Oracle confirmatory”改为“严格主实验自动化基础设施已就绪，下一步进入 clean revision 上的受控真实 LLM pilot”。
