@@ -147,3 +147,8 @@
 - 当前 strict serial pilot 已完成 `Ours / A1 / C1 / H2 / B6 @ seed=1001`，以及 `B6 @ seed=1001` 的 `Ours + B0-B5` paired pilot，共 `10` 个 unit、`13` 次 API 调用、`80444` prompt tokens、`788` completion tokens、`81232` total tokens。
 - 当前 strict serial pilot 的真实行为结果为：`A1` success、`C1` success、`B6` success、`H2` failure；`B6` paired pilot 中 `B0` failure、`B1-B5` success。
 - 生成 `experiments/results/strict_serial_pilot_v2/reports/strict_agent_pilot_20260726_v2/strict_main_agent.strict_audit.json` 与 `strict_main_agent.cost_estimate.json`：当前 audit 状态为 `partial`、无 fallback / mixed revision / missing trace；full-grid 主实验外推约为 `9828` 次调用、`61411392` total tokens。
+- 新增 `experiments/scripts/run_strict_group.py`，用于在 strict 矩阵下按 group/system/scenario/seed 子集串行执行 unit，并落盘 `group_run_summary.json`，避免在需要批量运行 Oracle 零成本实验时手工拼接单 unit 命令。
+- 调整 `run_strict_serial_unit.py`、`audit_strict_experiment.py` 与 `estimate_strict_main_cost.py` 的 usage 统计逻辑，统一按 trace 中真实 `prompt/completion/input/output/total tokens` 归一化汇总，避免只依赖 manifest 汇总字段。
+- 为 strict group runner 与 token 归一化链新增 smoke tests，覆盖 group summary 落盘，以及 strict audit / cost estimate 对 `prompt_tokens`、`completion_tokens` 的读取与外推。
+- 复跑 `python3 -m unittest experiments.tests.test_smoke` 与 `python3 -m compileall -q experiments`，当前离线验证为 `67/67` 全部通过，且 `experiments/` 全量编译无报错。
+- 同步更新 `docs/实验结果摘要.md`、`docs/实验实现进展.md` 与 `docs/论文最终实验结果封版计划.md`，明确 `strict_oracle_ablations_20260726_v1` 已完成 `5760/5760` unit、strict audit `pass`，当前剩余核心缺口已集中到真实 `external_llm` 主实验。
