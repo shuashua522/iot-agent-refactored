@@ -171,3 +171,6 @@
 - 启动第二次阶段 A 正式 run：`experiments/results/strict_main_agent_final_20260726_v2/` 在 frozen revision `df7b67d` 上串行执行 `seed=1001`，成功越过 `F1` 阻断点并推进到 `35/252`，随后在 `B0/H2/1001` 暴露出新的执行层缺口。
 - 修复模型坏动作的执行层容错：当模型输出缺少必需参数或其他无效 service/args 时，runner 现在会把它记录为失败动作和行为失败，而不是抛 Python 异常打断整轮 run。
 - 为上述坏动作容错补充 smoke，并复跑 `python3 -m unittest experiments.tests.test_smoke`，当前总数提升到 `71/71` 全部通过；同时复跑 `python3 -m compileall -q experiments` 通过。
+- 启动第三次阶段 A 正式 run：`experiments/results/strict_main_agent_final_20260726_v3/` 在 frozen revision `84aca0f` 上串行执行 `seed=1001`，成功推进到 `175/252`，跑过 `B0 / B1 / B2 / B3` 四个系统，随后在 `B4/G3/1001` 暴露出新的 strict 协议缺口。
+- 修复 external parse failure 的归因口径：当模型输出近似 JSON 但不合法时，planner 现在保留 `agent_backend=external_llm` 并记录 `external_parse_failed:*` 行为失败，不再偷偷走 `heuristic_fallback`；同时将 `external_call_failed` / `external_init_failed` 单独保留为 strict transport failure / retry 信号。
+- 为上述 parse-failure 归因修复补充 smoke，并复跑 `python3 -m unittest experiments.tests.test_smoke`，当前总数提升到 `72/72` 全部通过；同时复跑 `python3 -m compileall -q experiments` 通过。
