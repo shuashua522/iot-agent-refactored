@@ -132,6 +132,7 @@
 
 ## 2026-07-26
 
+- 更新 `docs/实验结果摘要.md`，补入 `strict_main_agent_final_20260726_v4` 的当前真实 LLM 主实验状态，明确当前收口口径为 `seed=1012`、`1013` 已清理。
 - 按当前正式 pilot 进度继续推进 `strict_main_agent_final_20260726_v4`，并根据最新口径将结果范围收口到 `seed=1012`；`seed=1013` 的误跑结果已从结果树中清理，不纳入当前正式数据。
 - 重新整理 `strict_main_agent_final_20260726_v4` 的结果目录后，`1012` 现已形成 252/252 的完整结果，`strict_main_agent.strict_audit.json` 已重新生成并回到仅含 `1012` 的 partial 审计状态。
 - 继续收口双 planner 语义：`_inject_registry_candidates` 现已支持 memory-grounded candidate 与 routine candidate，`retrieval_metadata` 补入 `memory_entity_map`，`OraclePlanner` / `AgentPlanner` 对 query、automation、routine 与高 `memory_worth` safety 语义已重新对齐。
