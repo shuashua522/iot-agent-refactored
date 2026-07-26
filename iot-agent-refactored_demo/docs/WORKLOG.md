@@ -152,3 +152,8 @@
 - 为 strict group runner 与 token 归一化链新增 smoke tests，覆盖 group summary 落盘，以及 strict audit / cost estimate 对 `prompt_tokens`、`completion_tokens` 的读取与外推。
 - 复跑 `python3 -m unittest experiments.tests.test_smoke` 与 `python3 -m compileall -q experiments`，当前离线验证为 `67/67` 全部通过，且 `experiments/` 全量编译无报错。
 - 同步更新 `docs/实验结果摘要.md`、`docs/实验实现进展.md` 与 `docs/论文最终实验结果封版计划.md`，明确 `strict_oracle_ablations_20260726_v1` 已完成 `5760/5760` unit、strict audit `pass`，当前剩余核心缺口已集中到真实 `external_llm` 主实验。
+- 提交 clean revision `fbedd87`（提交信息：`补齐 strict group runner 与 token 归一化审计`），作为后续新一轮 strict real-LLM pilot 的冻结起点。
+- 在新的 clean revision `fbedd87` 上启动 `experiments/results/strict_serial_pilot_v3/`：已串行完成 `Ours / G1 / D3 / E1 / F2 / C1 @ seed=1001` 共 `5` 个 unit、`9` 次 API 调用、`11103` prompt tokens、`532` completion tokens、`11635` total tokens。
+- `strict_agent_pilot_20260726_v3` 当前真实行为结果为：`G1` success、`D3` success、`E1` success、`F2` success、`C1` failure；其中 `C1` 的失败是模型漏掉了有效窗口内本应执行的动作，而不是过期后误执行。
+- 生成 `experiments/results/strict_serial_pilot_v3/reports/strict_agent_pilot_20260726_v3/strict_main_agent.strict_audit.json` 与 `strict_main_agent.cost_estimate.json`：当前 audit 状态为 `partial`、无 fallback / mixed revision / missing trace；基于 `v3` 样本外推，full-grid 主实验约为 `13608` 次调用、`17592120` total tokens。
+- 同步更新 `docs/实验结果摘要.md`、`docs/实验实现进展.md` 与 `docs/论文最终实验结果封版计划.md`，把 `strict_agent_pilot_20260726_v3` 作为当前最新 clean-revision pilot 记录入册，并明确 `v2/v3` 成本外推差异较大、full-grid 预算仍需更多代表场景校准。
